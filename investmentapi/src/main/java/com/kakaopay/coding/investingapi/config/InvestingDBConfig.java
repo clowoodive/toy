@@ -1,6 +1,6 @@
-package com.kakaopay.coding.investapiserver.config;
+package com.kakaopay.coding.investingapi.config;
 
-import com.kakaopay.coding.investapiserver.mapper.InvestingDBMapper;
+import com.kakaopay.coding.investingapi.mapper.InvestingDBMapper;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -26,7 +26,6 @@ public class InvestingDBConfig {
     @Bean
     public DataSource dataSource() {
         HikariDataSource dataSource = new HikariDataSource(hikariConfig());
-//        return dataSource;
         return new LazyConnectionDataSourceProxy(dataSource);
     }
 

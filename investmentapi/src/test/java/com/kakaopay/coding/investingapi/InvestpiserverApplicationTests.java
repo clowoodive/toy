@@ -1,10 +1,10 @@
-package com.kakaopay.coding.investmentapi;
+package com.kakaopay.coding.investingapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class InvestapiserverApplicationTests {
+class InvestingApiServerApplicationTests {
 
 	@Test
 	void contextLoads() {
