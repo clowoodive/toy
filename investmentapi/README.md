@@ -20,6 +20,6 @@
 #### 최대 투자 금액 도달 시점에 초과 할 수 있는 문제
 - where절에 해당 레코드의 투자금액 필드값을 이용해 현재 투자금을 더해도 초과하지 않을 때에만 업데이트 처리.
 ```sql
-UPDATE product_investing SET accumulated_investing_amount = accumulated_investing_amount + #{add_investing_amount}, investing_user_count = investing_user_count + 1 
-WHERE product_id = #{product_id} AND (accumulated_investing_amount + #{add_investing_amount}) <= #{total_investing_amount}
+UPDATE product_investing SET accumulated_investing_amount = accumulated_investing_amount + {add_investing_amount}, investing_user_count = investing_user_count + 1 
+WHERE product_id = {product_id} AND (accumulated_investing_amount + {add_investing_amount}) <= {total_investing_amount}
 ```
