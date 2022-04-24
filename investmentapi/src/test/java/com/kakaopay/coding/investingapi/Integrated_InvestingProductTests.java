@@ -157,7 +157,7 @@ class Integrated_InvestingProductTests {
         // then
         resultInvesting.andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.ExceededAmount.toString()));
+                .andExpect(jsonPath("$.result_code").value(ResultCode.ExceededAmount.getCode()));
 
         resultUserProduct.andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -203,7 +203,7 @@ class Integrated_InvestingProductTests {
         // then
         resultInvesting.andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.BadPeriod.toString()));
+                .andExpect(jsonPath("$.result_code").value(ResultCode.BadPeriod.getCode()));
 
         resultUserProduct.andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -246,7 +246,7 @@ class Integrated_InvestingProductTests {
         // then
         resultInvesting.andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.BadPeriod.toString()));
+                .andExpect(jsonPath("$.result_code").value(ResultCode.BadPeriod.getCode()));
 
         resultUserProduct.andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -289,7 +289,7 @@ class Integrated_InvestingProductTests {
         // then
         resultInvesting.andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.SoldOut.toString()));
+                .andExpect(jsonPath("$.result_code").value(ResultCode.SoldOut.getCode()));
 
         resultUserProduct.andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

@@ -20,11 +20,11 @@ public class InvestingException extends RuntimeException {
 
     public static class ResultBody {
         @JsonProperty("result_code")
-        public final ResultCode resultCode;
+        public final int resultCode;
         @JsonProperty("result_message")
         public final String resultMessage;
 
-        public ResultBody(ResultCode resultCode, String message) {
+        public ResultBody(int resultCode, String message) {
             this.resultCode = resultCode;
             this.resultMessage = message;
         }

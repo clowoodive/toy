@@ -63,7 +63,7 @@ class Unit_Controller_GetUserProductsTests {
         // then
         resultActions.andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.NotFoundUserId.toString()));
+                .andExpect(jsonPath("$.result_code").value(ResultCode.NotFoundUserId.getCode()));
     }
 
     @Test
@@ -80,7 +80,7 @@ class Unit_Controller_GetUserProductsTests {
         // then
         resultActions.andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.NotFoundUserId.toString()));
+                .andExpect(jsonPath("$.result_code").value(ResultCode.NotFoundUserId.getCode()));
     }
 
     @Test
@@ -97,7 +97,7 @@ class Unit_Controller_GetUserProductsTests {
         // then
         resultActions.andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.InternalServerError.toString()));
+                .andExpect(jsonPath("$.result_code").value(ResultCode.InternalServerError.getCode()));
     }
 
     @Test
@@ -114,6 +114,6 @@ class Unit_Controller_GetUserProductsTests {
         // then
         resultActions.andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.BadUserId.toString()));
+                .andExpect(jsonPath("$.result_code").value(ResultCode.BadUserId.getCode()));
     }
 }

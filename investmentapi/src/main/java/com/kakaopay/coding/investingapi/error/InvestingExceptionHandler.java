@@ -15,7 +15,7 @@ public class InvestingExceptionHandler extends ResponseEntityExceptionHandler {
 
         System.out.println("ResultCode : " + iex.resultCode + ", ResultMessage : " + iex.resultMessage);
 
-        InvestingException.ResultBody resultBody = new InvestingException.ResultBody(iex.resultCode, iex.resultMessage);
+        InvestingException.ResultBody resultBody = new InvestingException.ResultBody(iex.resultCode.getCode(), iex.resultMessage);
 
         return new ResponseEntity<>(resultBody, HttpStatus.FORBIDDEN);
     }
@@ -25,7 +25,7 @@ public class InvestingExceptionHandler extends ResponseEntityExceptionHandler {
 
         System.out.println("class : " + ex.getClass().getName() + ", message : " + ex.getMessage());
 
-        InvestingException.ResultBody resultBody = new InvestingException.ResultBody(ResultCode.InternalServerError, null);
+        InvestingException.ResultBody resultBody = new InvestingException.ResultBody(ResultCode.InternalServerError.getCode(), null);
 
         return new ResponseEntity<>(resultBody, HttpStatus.FORBIDDEN);
     }
