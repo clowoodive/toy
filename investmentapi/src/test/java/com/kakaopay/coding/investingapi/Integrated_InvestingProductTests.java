@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class IntegratedInvestingProductTests {
+class Integrated_InvestingProductTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -289,7 +289,7 @@ class IntegratedInvestingProductTests {
         // then
         resultInvesting.andExpect(status().isForbidden())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.ClosedProduct.toString()));
+                .andExpect(jsonPath("$.result_code").value(ResultCode.SoldOut.toString()));
 
         resultUserProduct.andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

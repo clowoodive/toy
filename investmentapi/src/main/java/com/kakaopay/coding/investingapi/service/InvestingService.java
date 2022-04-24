@@ -76,7 +76,7 @@ public class InvestingService {
             throw new InvestingException(ResultCode.BadInvestingData);
 
         if (productInvestingEntity.accumulated_investing_amount >= productMetaEntity.total_investing_amount)
-            throw new InvestingException(ResultCode.ClosedProduct, "already completed");
+            throw new InvestingException(ResultCode.SoldOut, "already soldout");
 
         int isUpdated = investingDBMapper.updateProductInvesting(productId, investingAmount, productMetaEntity.total_investing_amount);
         if (isUpdated <= 0)

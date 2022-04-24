@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(MockitoExtension.class)
-public class InvestingService_GetUserProductListTests {
+public class Unit_Service_GetUserProductListTests {
     @InjectMocks
     private InvestingService investingService;
 

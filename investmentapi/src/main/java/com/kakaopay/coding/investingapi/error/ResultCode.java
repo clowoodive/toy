@@ -12,7 +12,7 @@ public enum ResultCode {
     ExceededAmount(2100),
     NotFoundUserId(2101),
     DuplicatedInvesting(2102),
-    ClosedProduct(2103),
+    SoldOut(2103),
     ;
 
     private final int code;

@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import static org.mockito.ArgumentMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-public class InvestingService_InvestingProductTests {
+public class Unit_Service_InvestingProductTests {
     @InjectMocks
     private InvestingService investingService;
 
@@ -184,7 +184,7 @@ public class InvestingService_InvestingProductTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        Assertions.assertTrue(ex.resultCode == ResultCode.ClosedProduct);
+        Assertions.assertTrue(ex.resultCode == ResultCode.SoldOut);
     }
 
     @Test
