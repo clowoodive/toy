@@ -24,17 +24,16 @@ import static org.mockito.ArgumentMatchers.anyList;
 
 @ExtendWith(MockitoExtension.class)
 public class InvestingService_GetProductListTests {
-
     @InjectMocks
-    InvestingService investingService;
+    private InvestingService investingService;
 
     @Mock
-    InvestingDBMapper investingDBMapper;
+    private InvestingDBMapper investingDBMapper;
 
 
     @Test
-    @DisplayName("TestGetProductList_NoProductMeta_ShouldEmpty")
-    void testGetProductListNoProductMeta() {
+    @DisplayName("Test_GetProductList_WithNoProductMeta_ShouldEmpty")
+    void testGetProductListWithNoProductMeta() {
         // given
         Mockito.when(investingDBMapper.selectProductMetaListValid(any())).thenReturn(List.of());
 
@@ -46,13 +45,14 @@ public class InvestingService_GetProductListTests {
     }
 
     @Test
-    @DisplayName("TestGetProductList_NoProductInvesting_ShouldInvestingException")
-    void testGetProductNoProductInvesting() {
+    @DisplayName("Test_GetProductList_WithNoProductInvesting_ShouldInvestingException")
+    void testGetProductListWithNoProductInvesting() {
         // given
         List<ProductMetaEntity> productMetaEntityList = new ArrayList<>();
         ProductMetaEntity productMeta1 = new ProductMetaEntity();
         productMeta1.product_id = 1;
         productMetaEntityList.add(productMeta1);
+
         ProductMetaEntity productMeta2 = new ProductMetaEntity();
         productMeta2.product_id = 2;
         productMetaEntityList.add(productMeta2);
@@ -61,20 +61,21 @@ public class InvestingService_GetProductListTests {
         Mockito.when(investingDBMapper.selectProductInvestingListByIdList(anyList())).thenReturn(List.of());
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getProductList());
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getProductList());
         Assertions.assertTrue(ex.resultCode == ResultCode.BadServerData);
     }
 
     @Test
-    @DisplayName("TestGetProductList_MissMatchMetaWithInvesting_ShouldInvestingException")
-    void testGetProductMissMatchData() {
+    @DisplayName("Test_GetProductList_WithMissMatchMetaAndInvesting_ShouldInvestingException")
+    void testGetProductListWithMissMatchData() {
         // given
         List<ProductMetaEntity> productMetaEntityList = new ArrayList<>();
         ProductMetaEntity productMeta1 = new ProductMetaEntity();
         productMeta1.product_id = 1;
         productMetaEntityList.add(productMeta1);
+
         ProductMetaEntity productMeta2 = new ProductMetaEntity();
         productMeta2.product_id = 2;
         productMetaEntityList.add(productMeta2);
@@ -88,9 +89,9 @@ public class InvestingService_GetProductListTests {
         Mockito.when(investingDBMapper.selectProductInvestingListByIdList(anyList())).thenReturn(productInvestingEntityList);
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getProductList());
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getProductList());
         Assertions.assertTrue(ex.resultCode == ResultCode.BadServerData);
     }
 }

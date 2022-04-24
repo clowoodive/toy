@@ -22,17 +22,16 @@ import static org.mockito.ArgumentMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 public class InvestingService_InvestingProductTests {
-
     @InjectMocks
-    InvestingService investingService;
+    private InvestingService investingService;
 
     @Mock
-    InvestingDBMapper investingDBMapper;
+    private InvestingDBMapper investingDBMapper;
 
 
     @Test
-    @DisplayName("TestInvestProduct_NoProductData_ShouldInvestingException")
-    void testInvestProductNoProductMeta() {
+    @DisplayName("Test_InvestProduct_WithNoProductData_ShouldInvestingException")
+    void testInvestProductWithNoProductMeta() {
         // given
         long userId = 1234;
         int productId = 1;
@@ -41,15 +40,15 @@ public class InvestingService_InvestingProductTests {
         Mockito.when(investingDBMapper.selectProductMeta(anyInt())).thenReturn(null);
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
         Assertions.assertTrue(ex.resultCode == ResultCode.BadProductId);
     }
 
     @Test
-    @DisplayName("TestInvestProduct_NotOpenedProduct_ShouldInvestingException")
-    void testInvestProductNotOpenedProduct() {
+    @DisplayName("Test_InvestProduct_WithNotOpenedProduct_ShouldInvestingException")
+    void testInvestProductWithNotOpenedProduct() {
         // given
         var now = LocalDateTime.now();
         long userId = 1234;
@@ -66,15 +65,15 @@ public class InvestingService_InvestingProductTests {
         Mockito.when(investingDBMapper.selectProductMeta(anyInt())).thenReturn(productMetaEntity);
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
         Assertions.assertTrue(ex.resultCode == ResultCode.BadPeriod);
     }
 
     @Test
-    @DisplayName("TestInvestProduct_ExpiredProduct_ShouldInvestingException")
-    void testInvestProductExpiredProduct() {
+    @DisplayName("Test_InvestProduct_WithExpiredProduct_ShouldInvestingException")
+    void testInvestProductWithExpiredProduct() {
         // given
         var now = LocalDateTime.now();
         long userId = 1234;
@@ -91,15 +90,15 @@ public class InvestingService_InvestingProductTests {
         Mockito.when(investingDBMapper.selectProductMeta(anyInt())).thenReturn(productMetaEntity);
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
         Assertions.assertTrue(ex.resultCode == ResultCode.BadPeriod);
     }
 
     @Test
-    @DisplayName("TestInvestProduct_AlreadyInvesting_ShouldInvestingException")
-    void testInvestProductAlreadyInvesting() {
+    @DisplayName("Test_InvestProduct_WithAlreadyInvesting_ShouldInvestingException")
+    void testInvestProductWithAlreadyInvesting() {
         // given
         var now = LocalDateTime.now();
         long userId = 1234;
@@ -114,7 +113,7 @@ public class InvestingService_InvestingProductTests {
         productMetaEntity.finished_at = now.plusDays(5);
 
         UserProductEntity userProductEntity = new UserProductEntity();
-        userProductEntity.user_id =  userId;
+        userProductEntity.user_id = userId;
         userProductEntity.product_id = productId;
         userProductEntity.investing_amount = investingAmount;
         userProductEntity.investing_at = now.minusDays(1);
@@ -123,15 +122,15 @@ public class InvestingService_InvestingProductTests {
         Mockito.when(investingDBMapper.selectUserProduct(anyLong(), anyInt())).thenReturn(userProductEntity);
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
         Assertions.assertTrue(ex.resultCode == ResultCode.DuplicatedInvesting);
     }
 
     @Test
-    @DisplayName("TestInvestProduct_NoProductInvesting_ShouldInvestingException")
-    void testInvestProductNoProductInvesting() {
+    @DisplayName("Test_InvestProduct_WithNoProductInvesting_ShouldInvestingException")
+    void testInvestProductWithNoProductInvesting() {
         // given
         var now = LocalDateTime.now();
         long userId = 1234;
@@ -150,15 +149,15 @@ public class InvestingService_InvestingProductTests {
         Mockito.when(investingDBMapper.selectProductInvesting(anyInt())).thenReturn(null);
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
         Assertions.assertTrue(ex.resultCode == ResultCode.BadInvestingData);
     }
 
     @Test
-    @DisplayName("TestInvestProduct_CompleteTotalAmount_ShouldInvestingException")
-    void testInvestProductCompleteTotalAmount() {
+    @DisplayName("Test_InvestProduct_WithCompleteTotalAmount_ShouldInvestingException")
+    void testInvestProductWithCompleteTotalAmount() {
         // given
         var now = LocalDateTime.now();
         long userId = 1234;
@@ -182,15 +181,15 @@ public class InvestingService_InvestingProductTests {
         Mockito.when(investingDBMapper.selectProductInvesting(anyInt())).thenReturn(productInvestingEntity);
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
         Assertions.assertTrue(ex.resultCode == ResultCode.ClosedProduct);
     }
 
     @Test
-    @DisplayName("TestInvestProduct_ExceededUpdate_ShouldInvestingException")
-    void testInvestProductExceededUpdate() {
+    @DisplayName("Test_InvestProduct_WithExceededUpdate_ShouldInvestingException")
+    void testInvestProductWithExceededUpdate() {
         // given
         var now = LocalDateTime.now();
         long userId = 1234;
@@ -214,15 +213,15 @@ public class InvestingService_InvestingProductTests {
         Mockito.when(investingDBMapper.selectProductInvesting(anyInt())).thenReturn(productInvestingEntity);
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
         Assertions.assertTrue(ex.resultCode == ResultCode.ExceededAmount);
     }
 
     @Test
-    @DisplayName("TestInvestProduct_FailInsertUserProduct_ShouldInvestingException")
-    void testInvestProductFailInsertUserProduct() {
+    @DisplayName("Test_InvestProduct_WithFailInsertUserProduct_ShouldInvestingException")
+    void testInvestProductWithFailInsertUserProduct() {
         // given
         var now = LocalDateTime.now();
         long userId = 1234;
@@ -248,9 +247,9 @@ public class InvestingService_InvestingProductTests {
         Mockito.when(investingDBMapper.insertUserProduct(any())).thenReturn(0);
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
         Assertions.assertTrue(ex.resultCode == ResultCode.InternalServerError);
     }
 }

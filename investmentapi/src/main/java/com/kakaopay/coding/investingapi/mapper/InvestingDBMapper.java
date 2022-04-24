@@ -3,10 +3,7 @@ package com.kakaopay.coding.investingapi.mapper;
 import com.kakaopay.coding.investingapi.entity.ProductInvestingEntity;
 import com.kakaopay.coding.investingapi.entity.ProductMetaEntity;
 import com.kakaopay.coding.investingapi.entity.UserProductEntity;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +31,7 @@ public interface InvestingDBMapper {
             + "</script>")
     List<ProductMetaEntity> selectProductMetaListByIdList(@Param("product_id_list") List<Integer> productIdList);
 
+
     // ProductInvestingEntity
 
     @Insert("INSERT INTO product_investing (product_id, accumulated_investing_amount, investing_user_count) " +
@@ -54,9 +52,10 @@ public interface InvestingDBMapper {
 
     @Update("UPDATE product_investing " +
             "SET accumulated_investing_amount = accumulated_investing_amount + #{add_investing_amount}, investing_user_count = investing_user_count + 1 " +
-            "WHERE product_id = #{product_id} AND accumulated_investing_amount + #{add_investing_amount} <= #{total_investing_amount}")
+            "WHERE product_id = #{product_id} AND (accumulated_investing_amount + #{add_investing_amount}) <= #{total_investing_amount}")
     int updateProductInvesting(@Param("product_id") int productId, @Param("add_investing_amount") long addInvestingAmount,
                                @Param("total_investing_amount") long totalInvestingAmount);
+
 
     // UserProductEntity
 
@@ -69,4 +68,16 @@ public interface InvestingDBMapper {
 
     @Select("SELECT * FROM user_product")
     List<UserProductEntity> selectUserProductListAll(@Param("user_id") long userId);
+
+
+    // MetaData
+    @Delete("TRUNCATE product_meta")
+    void truncateProductMeta();
+
+    @Delete("TRUNCATE product_investing")
+    void truncateProductInvesting();
+
+    @Delete("TRUNCATE user_product")
+    void truncateUserProduct();
+
 }

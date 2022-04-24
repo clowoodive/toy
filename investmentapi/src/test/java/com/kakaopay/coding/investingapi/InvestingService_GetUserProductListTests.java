@@ -19,21 +19,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(MockitoExtension.class)
 public class InvestingService_GetUserProductListTests {
-
     @InjectMocks
-    InvestingService investingService;
+    private InvestingService investingService;
 
     @Mock
-    InvestingDBMapper investingDBMapper;
+    private InvestingDBMapper investingDBMapper;
 
 
     @Test
-    @DisplayName("TestGetUserProductList_NoUserProduct_ShouldEmpty")
-    void testGetUserProductListNoUserProduct() {
+    @DisplayName("Test_GetUserProductList_WithNoUserProduct_ShouldEmpty")
+    void testGetUserProductListWithNoUserProduct() {
         // given
         long userId = 1234;
         Mockito.when(investingDBMapper.selectUserProductListAll(anyLong())).thenReturn(List.of());
@@ -46,8 +46,8 @@ public class InvestingService_GetUserProductListTests {
     }
 
     @Test
-    @DisplayName("TestGetUserProductList_NoProductMeta_ShouldInvestingException")
-    void testGetUserProductListNoProductMeta() {
+    @DisplayName("Test_GetUserProductList_WithNoProductMeta_ShouldInvestingException")
+    void testGetUserProductListWithNoProductMeta() {
         // given
         long userId = 1234;
 
@@ -56,6 +56,7 @@ public class InvestingService_GetUserProductListTests {
         userProductEntity1.user_id = userId;
         userProductEntity1.product_id = 1;
         userProductEntityList.add(userProductEntity1);
+
         UserProductEntity userProductEntity2 = new UserProductEntity();
         userProductEntity2.user_id = userId;
         userProductEntity2.product_id = 2;
@@ -65,15 +66,15 @@ public class InvestingService_GetUserProductListTests {
         Mockito.when(investingDBMapper.selectProductMetaListByIdList(any())).thenReturn(List.of());
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getUserProductList(userId));
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getUserProductList(userId));
         Assertions.assertTrue(ex.resultCode == ResultCode.BadServerData);
     }
 
     @Test
-    @DisplayName("TestGetUserProductList_MissMatchUserProductWithMeta_ShouldInvestingException")
-    void testGetUserProductListMissMatchUserProductWithMeta() {
+    @DisplayName("Test_GetUserProductList_WithMissMatchUserProductAndMeta_ShouldInvestingException")
+    void testGetUserProductListWithMissMatchUserProductAndMeta() {
         // given
         long userId = 1234;
 
@@ -82,6 +83,7 @@ public class InvestingService_GetUserProductListTests {
         userProductEntity1.user_id = userId;
         userProductEntity1.product_id = 1;
         userProductEntityList.add(userProductEntity1);
+
         UserProductEntity userProductEntity2 = new UserProductEntity();
         userProductEntity2.user_id = userId;
         userProductEntity2.product_id = 2;
@@ -96,9 +98,9 @@ public class InvestingService_GetUserProductListTests {
         Mockito.when(investingDBMapper.selectProductMetaListByIdList(any())).thenReturn(productMetaEntityList);
 
         // when
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getUserProductList(userId));
 
         // then
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getUserProductList(userId));
         Assertions.assertTrue(ex.resultCode == ResultCode.BadServerData);
     }
 }

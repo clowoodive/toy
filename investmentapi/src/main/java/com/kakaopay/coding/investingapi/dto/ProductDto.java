@@ -15,7 +15,10 @@ public class ProductDto {
     public LocalDateTime started_at;
     public LocalDateTime finished_at;
 
-    public ProductDto(ProductMetaEntity productMeta, ProductInvestingEntity productInvesting) {
+    public ProductDto() {
+    }
+
+    public ProductDto(ProductMetaEntity productMeta, ProductInvestingEntity productInvesting, boolean isInvestingClosed) {
         this.product_id = productMeta.product_id;
         this.title = productMeta.title;
         this.total_investing_amount = productMeta.total_investing_amount;
@@ -24,8 +27,7 @@ public class ProductDto {
         if (productInvesting != null) {
             this.accumulated_investing_amount = productInvesting.accumulated_investing_amount;
             this.investing_user_count = productInvesting.investing_user_count;
-            if (productMeta.total_investing_amount <= productInvesting.accumulated_investing_amount)
-                this.is_investing_closed = true;
+            this.is_investing_closed = isInvestingClosed;
         }
 
         this.started_at = productMeta.started_at;

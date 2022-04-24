@@ -48,7 +48,8 @@ public class InvestingService {
         for (var productMetaEntity : validProductMetaEntityList) {
             ProductInvestingEntity productInvestingEntity = productInvestingMap.get(productMetaEntity.product_id);
 
-            ProductDto productDto = new ProductDto(productMetaEntity, productInvestingEntity);
+            boolean isInvestingClosed = productMetaEntity.total_investing_amount <= productInvestingEntity.accumulated_investing_amount;
+            ProductDto productDto = new ProductDto(productMetaEntity, productInvestingEntity, isInvestingClosed);
             productDtoList.add(productDto);
         }
 

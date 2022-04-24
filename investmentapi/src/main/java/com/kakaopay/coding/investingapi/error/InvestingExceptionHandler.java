@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import static com.kakaopay.coding.investingapi.error.ResultCode.InternalServerError;
 
 @RestControllerAdvice
 public class InvestingExceptionHandler extends ResponseEntityExceptionHandler {
@@ -26,7 +25,7 @@ public class InvestingExceptionHandler extends ResponseEntityExceptionHandler {
 
         System.out.println("class : " + ex.getClass().getName() + ", message : " + ex.getMessage());
 
-        InvestingException.ResultBody resultBody = new InvestingException.ResultBody(InternalServerError, null);
+        InvestingException.ResultBody resultBody = new InvestingException.ResultBody(ResultCode.InternalServerError, null);
 
         return new ResponseEntity<>(resultBody, HttpStatus.FORBIDDEN);
     }

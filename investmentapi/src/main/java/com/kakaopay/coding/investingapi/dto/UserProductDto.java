@@ -12,6 +12,8 @@ public class UserProductDto {
     public long investing_amount;
     public LocalDateTime investing_at;
 
+    public UserProductDto(){}
+
     public UserProductDto(UserProductEntity userProductEntity, ProductMetaEntity productMeta) {
         this.product_id = userProductEntity.product_id;
 

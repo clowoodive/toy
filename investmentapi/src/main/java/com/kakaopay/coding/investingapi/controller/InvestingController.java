@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/investing", produces = MediaType.APPLICATION_JSON_VALUE)
 public class InvestingController {
-    private final static String HEADER_USER_ID_KEY = "x-user-id";
+    public final static String HEADER_USER_ID_KEY = "x-user-id";
 
     private final InvestingService investingService;
 
@@ -31,7 +31,7 @@ public class InvestingController {
     }
 
     @PostMapping("/user/products/{product_id}/investing-amount/{investing_amount}")
-    public void investProduct(@RequestHeader Map<String, String> headers, @PathVariable("product_id") int productId,
+    public void investingProduct(@RequestHeader Map<String, String> headers, @PathVariable("product_id") int productId,
                               @PathVariable("investing_amount") long investingAmount) {
         String userIdStr = headers.get(HEADER_USER_ID_KEY);
         if (userIdStr == null || userIdStr.isEmpty())
@@ -62,5 +62,4 @@ public class InvestingController {
 
         return investingService.getUserProductList(userId);
     }
-
 }

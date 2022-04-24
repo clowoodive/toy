@@ -9,7 +9,6 @@ public enum ResultCode {
     BadProductId(2005),
     BadPeriod(2006),
     BadInvestingData(2007),
-
     ExceededAmount(2100),
     NotFoundUserId(2101),
     DuplicatedInvesting(2102),
