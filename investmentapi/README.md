@@ -1,7 +1,14 @@
 ## 투자 서비스를 제공하는 REST API 서버
 
+
+### 앞으로 개선 사항
+- Getter, Setter 적용
+- 다수의 파라미터 입력받는 메소드, 생성자 개선
+
+<br>
+
 ### 요구 사항
-**카카오페이의 부동산/신용투자 서비스**
+** 부동산/신용투자 서비스**
 - 사용자는 원하는 부동산/신용 투자 상품을 투자할 수 있습니다.
 - 투자상품이 오픈될 때, 다수의 고객이 동시에 투자를 합니다.
 - 투자 후 투자상품의 누적 투자모집 금액,투자자 수가 증가됩니다.
@@ -83,3 +90,28 @@
 UPDATE product_investing SET accumulated_investing_amount = accumulated_investing_amount + {add_investing_amount}, investing_user_count = investing_user_count + 1 
 WHERE product_id = {product_id} AND (accumulated_investing_amount + {add_investing_amount}) <= {total_investing_amount}
 ```
+
+### 테이블 생성 쿼리
+CREATE TABLE `product_investing` (  
+`product_id` int(11) NOT NULL,  
+`accumulated_investing_amount` bigint(20) NOT NULL,  
+`investing_user_count` int(11) NOT NULL,  
+PRIMARY KEY (`product_id`)  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;  
+
+CREATE TABLE `product_meta` (  
+`product_id` int(11) NOT NULL,  
+`title` varchar(45) NOT NULL,  
+`total_investing_amount` bigint(20) NOT NULL,  
+`started_at` datetime(4) NOT NULL,  
+`finished_at` datetime(4) NOT NULL,  
+PRIMARY KEY (`product_id`)  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;  
+
+CREATE TABLE `user_product` (  
+`user_id` bigint(20) NOT NULL,  
+`product_id` int(11) NOT NULL,  
+`investing_amount` bigint(20) NOT NULL,  
+`investing_at` datetime(4) NOT NULL,  
+PRIMARY KEY (`user_id`,`product_id`)  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;  

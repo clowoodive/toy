@@ -1,1 +1,1 @@
-my repo for kakaopay
+과제 전형 저장소
