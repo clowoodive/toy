@@ -1,10 +1,4 @@
-CREATE TABLE IF NOT EXISTS `product_investing` (
-`product_id` int(11) NOT NULL,
-`accumulated_investing_amount` bigint(20) NOT NULL,
-`investing_user_count` int(11) NOT NULL,
-PRIMARY KEY (`product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+-- product meta
 CREATE TABLE IF NOT EXISTS `product_meta` (
 `product_id` int(11) NOT NULL,
 `title` varchar(45) NOT NULL,
@@ -14,7 +8,16 @@ CREATE TABLE IF NOT EXISTS `product_meta` (
 PRIMARY KEY (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `user_product` (
+-- product investing data
+CREATE TABLE IF NOT EXISTS `product` (
+`product_id` int(11) NOT NULL,
+`accumulated_investing_amount` bigint(20) NOT NULL,
+`investing_user_count` int(11) NOT NULL,
+PRIMARY KEY (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- user's investing data
+CREATE TABLE IF NOT EXISTS `user_investing` (
 `user_id` bigint(20) NOT NULL,
 `product_id` int(11) NOT NULL,
 `investing_amount` bigint(20) NOT NULL,

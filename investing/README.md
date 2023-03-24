@@ -101,7 +101,13 @@ UPDATE product_investing SET accumulated_investing_amount = accumulated_investin
 WHERE product_id = {product_id} AND (accumulated_investing_amount + {add_investing_amount}) <= {total_investing_amount}
 ```
 
-### 테이블 생성 쿼리
+# 쿼리
+## 스키마 생성 및 유저 생성(최초 1회)
+CREATE SCHEMA IF NOT EXISTS ToyInvesting DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;  
+CREATE USER 'toy'@'%' IDENTIFIED BY 'story!';  
+GRANT ALL PRIVILEGES ON ToyInvesting.* TO 'toy'@'%';
+
+## 테이블 생성
 CREATE TABLE `product_investing` (  
 `product_id` int(11) NOT NULL,  
 `accumulated_investing_amount` bigint(20) NOT NULL,  
