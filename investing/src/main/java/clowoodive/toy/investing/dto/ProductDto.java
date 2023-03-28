@@ -2,9 +2,15 @@ package clowoodive.toy.investing.dto;
 
 import clowoodive.toy.investing.entity.ProductInvestingEntity;
 import clowoodive.toy.investing.entity.ProductMetaEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@Getter
+@Setter
 public class ProductDto {
     public int product_id;
     public String title;
@@ -14,9 +20,6 @@ public class ProductDto {
     public boolean is_investing_closed;
     public LocalDateTime started_at;
     public LocalDateTime finished_at;
-
-    public ProductDto() {
-    }
 
     public ProductDto(ProductMetaEntity productMeta, ProductInvestingEntity productInvesting, boolean isInvestingClosed) {
         this.product_id = productMeta.product_id;
