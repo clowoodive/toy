@@ -64,7 +64,7 @@ public class Unit_Service_GetProductListTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getProductList());
 
         // then
-        Assertions.assertTrue(ex.resultCode == ResultCode.BadServerData);
+        Assertions.assertTrue(ex.getCode() == ResultCode.BadServerData);
     }
 
     @Test
@@ -92,6 +92,6 @@ public class Unit_Service_GetProductListTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getProductList());
 
         // then
-        Assertions.assertTrue(ex.resultCode == ResultCode.BadServerData);
+        Assertions.assertTrue(ex.getCode() == ResultCode.BadServerData);
     }
 }

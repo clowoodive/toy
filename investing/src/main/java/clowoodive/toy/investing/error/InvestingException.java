@@ -1,32 +1,27 @@
 package clowoodive.toy.investing.error;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class InvestingException extends RuntimeException {
-    private static final long serialVersionUID = 1340362425516757033L;
-
-    public final ResultCode resultCode;
-    public final String resultMessage;
+    private final ResultCode code;
+    private final String message;
 
     public InvestingException(ResultCode resultCode) {
-        this.resultCode = resultCode;
-        this.resultMessage = null;
+        this.code = resultCode;
+        this.message = null;
     }
 
-    public InvestingException(ResultCode resultCode, String message) {
-        this.resultCode = resultCode;
-        this.resultMessage = message;
-    }
-
+    @RequiredArgsConstructor
     public static class ResultBody {
         @JsonProperty("result_code")
-        public final int resultCode;
+        private final int resultCode;
         @JsonProperty("result_message")
-        public final String resultMessage;
-
-        public ResultBody(int resultCode, String message) {
-            this.resultCode = resultCode;
-            this.resultMessage = message;
-        }
+        private final String resultMessage;
     }
 }

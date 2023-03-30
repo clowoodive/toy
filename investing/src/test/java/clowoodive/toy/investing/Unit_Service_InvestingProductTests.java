@@ -43,7 +43,7 @@ public class Unit_Service_InvestingProductTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        Assertions.assertTrue(ex.resultCode == ResultCode.BadProductId);
+        Assertions.assertTrue(ex.getCode() == ResultCode.BadProductId);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class Unit_Service_InvestingProductTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        Assertions.assertTrue(ex.resultCode == ResultCode.BadPeriod);
+        Assertions.assertTrue(ex.getCode() == ResultCode.BadPeriod);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class Unit_Service_InvestingProductTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        Assertions.assertTrue(ex.resultCode == ResultCode.BadPeriod);
+        Assertions.assertTrue(ex.getCode() == ResultCode.BadPeriod);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class Unit_Service_InvestingProductTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        Assertions.assertTrue(ex.resultCode == ResultCode.DuplicatedInvesting);
+        Assertions.assertTrue(ex.getCode() == ResultCode.DuplicatedInvesting);
     }
 
     @Test
@@ -152,7 +152,7 @@ public class Unit_Service_InvestingProductTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        Assertions.assertTrue(ex.resultCode == ResultCode.BadInvestingData);
+        Assertions.assertTrue(ex.getCode() == ResultCode.BadInvestingData);
     }
 
     @Test
@@ -184,7 +184,7 @@ public class Unit_Service_InvestingProductTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        Assertions.assertTrue(ex.resultCode == ResultCode.SoldOut);
+        Assertions.assertTrue(ex.getCode() == ResultCode.SoldOut);
     }
 
     @Test
@@ -216,7 +216,7 @@ public class Unit_Service_InvestingProductTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        Assertions.assertTrue(ex.resultCode == ResultCode.ExceededAmount);
+        Assertions.assertTrue(ex.getCode() == ResultCode.ExceededAmount);
     }
 
     @Test
@@ -250,6 +250,6 @@ public class Unit_Service_InvestingProductTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        Assertions.assertTrue(ex.resultCode == ResultCode.InternalServerError);
+        Assertions.assertTrue(ex.getCode() == ResultCode.InternalServerError);
     }
 }

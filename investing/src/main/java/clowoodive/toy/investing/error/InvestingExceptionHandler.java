@@ -13,9 +13,9 @@ public class InvestingExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvestingException.class)
     protected ResponseEntity<InvestingException.ResultBody> handleInvestingException(InvestingException iex) {
 
-        System.out.println("ResultCode : " + iex.resultCode + ", ResultMessage : " + iex.resultMessage);
+        System.out.println("ResultCode : " + iex.getCode() + ", ResultMessage : " + iex.getMessage());
 
-        InvestingException.ResultBody resultBody = new InvestingException.ResultBody(iex.resultCode.getCode(), iex.resultMessage);
+        InvestingException.ResultBody resultBody = new InvestingException.ResultBody(iex.getCode().getCode(), iex.getMessage());
 
         return new ResponseEntity<>(resultBody, HttpStatus.FORBIDDEN);
     }
