@@ -38,7 +38,7 @@ public class Unit_Service_GetProductListTests {
         Mockito.when(investingDBMapper.selectProductMetaListValid(any())).thenReturn(List.of());
 
         // when
-        List<ProductDto> productDtoList = investingService.getProductList();
+        List<ProductDto> productDtoList = investingService.getProducts();
 
         // then
         Assertions.assertTrue(productDtoList.isEmpty());
@@ -61,7 +61,7 @@ public class Unit_Service_GetProductListTests {
         Mockito.when(investingDBMapper.selectProductInvestingListByIdList(anyList())).thenReturn(List.of());
 
         // when
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getProductList());
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getProducts());
 
         // then
         Assertions.assertTrue(ex.getCode() == ResultCode.BadServerData);
@@ -89,7 +89,7 @@ public class Unit_Service_GetProductListTests {
         Mockito.when(investingDBMapper.selectProductInvestingListByIdList(anyList())).thenReturn(productInvestingEntityList);
 
         // when
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getProductList());
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getProducts());
 
         // then
         Assertions.assertTrue(ex.getCode() == ResultCode.BadServerData);

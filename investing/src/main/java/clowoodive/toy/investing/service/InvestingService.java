@@ -1,10 +1,9 @@
 package clowoodive.toy.investing.service;
 
-import clowoodive.toy.investing.entity.UserProductEntity;
 import clowoodive.toy.investing.dto.ProductDto;
-import clowoodive.toy.investing.dto.UserProductDto;
 import clowoodive.toy.investing.entity.ProductInvestingEntity;
 import clowoodive.toy.investing.entity.ProductMetaEntity;
+import clowoodive.toy.investing.entity.UserProductEntity;
 import clowoodive.toy.investing.error.InvestingException;
 import clowoodive.toy.investing.error.ResultCode;
 import clowoodive.toy.investing.mapper.InvestingDBMapper;
@@ -21,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class InvestingService {
+
     private final InvestingDBMapper investingDBMapper;
 
     @Autowired
@@ -28,7 +28,7 @@ public class InvestingService {
         this.investingDBMapper = investingDBMapper;
     }
 
-    public List<ProductDto> getProductList() {
+    public List<ProductDto> getProducts() {
         val now = LocalDateTime.now();
 
         List<ProductMetaEntity> validProductMetaEntityList = investingDBMapper.selectProductMetaListValid(now);
@@ -62,7 +62,7 @@ public class InvestingService {
 
         ProductMetaEntity productMetaEntity = investingDBMapper.selectProductMeta(productId);
         if (productMetaEntity == null)
-            throw new InvestingException(ResultCode.BadProductId, "invalid product_id");
+            throw new InvestingException(ResultCode.InvalidProductId, "invalid product_id");
 
         if (productMetaEntity.started_at.isAfter(now) || productMetaEntity.finished_at.isBefore(now))
             throw new InvestingException(ResultCode.BadPeriod, "invalid product period");
@@ -93,29 +93,5 @@ public class InvestingService {
             throw new InvestingException(ResultCode.InternalServerError, "error create user data");
 
         return productId;
-    }
-
-    public List<UserProductDto> getUserProductList(long userId) {
-        List<UserProductEntity> userProductEntityList = investingDBMapper.selectUserProductListAll(userId);
-        if (userProductEntityList.size() == 0)
-            return new ArrayList<UserProductDto>();
-
-        var ownProductIdList = userProductEntityList.stream().map(m -> m.product_id).collect(Collectors.toList());
-
-        List<ProductMetaEntity> productMetaEntityList = investingDBMapper.selectProductMetaListByIdList(ownProductIdList);
-        if (ownProductIdList.size() != productMetaEntityList.size())
-            throw new InvestingException(ResultCode.BadServerData, "not found metadata");
-
-        Map<Integer, ProductMetaEntity> productMetaEntityMap = productMetaEntityList.stream().collect(Collectors.toMap(k -> k.product_id, v -> v));
-
-        List<UserProductDto> userProductDtoList = new ArrayList<>();
-        for (var userProductEntity : userProductEntityList) {
-            ProductMetaEntity productMetaEntity = productMetaEntityMap.get(userProductEntity.product_id);
-            UserProductDto userProductDto = new UserProductDto(userProductEntity, productMetaEntity);
-
-            userProductDtoList.add(userProductDto);
-        }
-
-        return userProductDtoList;
     }
 }

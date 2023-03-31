@@ -43,7 +43,7 @@ public class Unit_Service_InvestingProductTests {
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
 
         // then
-        Assertions.assertTrue(ex.getCode() == ResultCode.BadProductId);
+        Assertions.assertTrue(ex.getCode() == ResultCode.InvalidProductId);
     }
 
     @Test

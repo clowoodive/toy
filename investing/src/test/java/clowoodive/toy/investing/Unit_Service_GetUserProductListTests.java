@@ -7,6 +7,8 @@ import clowoodive.toy.investing.entity.ProductMetaEntity;
 import clowoodive.toy.investing.error.InvestingException;
 import clowoodive.toy.investing.error.ResultCode;
 import clowoodive.toy.investing.mapper.InvestingDBMapper;
+import clowoodive.toy.investing.service.UserService;
+import org.apache.catalina.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +27,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 @ExtendWith(MockitoExtension.class)
 public class Unit_Service_GetUserProductListTests {
     @InjectMocks
-    private InvestingService investingService;
+    private UserService userService;
 
     @Mock
     private InvestingDBMapper investingDBMapper;
@@ -39,7 +41,7 @@ public class Unit_Service_GetUserProductListTests {
         Mockito.when(investingDBMapper.selectUserProductListAll(anyLong())).thenReturn(List.of());
 
         // when
-        List<UserProductDto> userProductDtoList = investingService.getUserProductList(userId);
+        List<UserProductDto> userProductDtoList = userService.getUserProducts(userId);
 
         // then
         Assertions.assertTrue(userProductDtoList.isEmpty());
@@ -66,7 +68,7 @@ public class Unit_Service_GetUserProductListTests {
         Mockito.when(investingDBMapper.selectProductMetaListByIdList(any())).thenReturn(List.of());
 
         // when
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getUserProductList(userId));
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> userService.getUserProducts(userId));
 
         // then
         Assertions.assertTrue(ex.getCode() == ResultCode.BadServerData);
@@ -98,7 +100,7 @@ public class Unit_Service_GetUserProductListTests {
         Mockito.when(investingDBMapper.selectProductMetaListByIdList(any())).thenReturn(productMetaEntityList);
 
         // when
-        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.getUserProductList(userId));
+        InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> userService.getUserProducts(userId));
 
         // then
         Assertions.assertTrue(ex.getCode() == ResultCode.BadServerData);
