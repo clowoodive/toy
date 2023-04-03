@@ -7,6 +7,7 @@ import clowoodive.toy.investing.entity.UserProductEntity;
 import clowoodive.toy.investing.error.InvestingException;
 import clowoodive.toy.investing.error.ResultCode;
 import clowoodive.toy.investing.mapper.InvestingDBMapper;
+import clowoodive.toy.investing.mapper.UserDBMapper;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,12 @@ import java.util.stream.Collectors;
 public class InvestingService {
 
     private final InvestingDBMapper investingDBMapper;
+    private final UserDBMapper userDBMapper;
 
     @Autowired
-    public InvestingService(InvestingDBMapper investingDBMapper) {
+    public InvestingService(InvestingDBMapper investingDBMapper, UserDBMapper userDBMapper) {
         this.investingDBMapper = investingDBMapper;
+        this.userDBMapper = userDBMapper;
     }
 
     public List<ProductDto> getProducts() {
@@ -67,7 +70,7 @@ public class InvestingService {
         if (productMetaEntity.started_at.isAfter(now) || productMetaEntity.finished_at.isBefore(now))
             throw new InvestingException(ResultCode.BadPeriod, "invalid product period");
 
-        UserProductEntity userProductEntity = investingDBMapper.selectUserProduct(userId, productId);
+        UserProductEntity userProductEntity = userDBMapper.selectUserProduct(userId, productId);
         if (userProductEntity != null)
             throw new InvestingException(ResultCode.DuplicatedInvesting, "already investing");
 
@@ -88,7 +91,7 @@ public class InvestingService {
         userProductEntity.investing_amount = investingAmount;
         userProductEntity.investing_at = LocalDateTime.now();
 
-        int isInserted = investingDBMapper.insertUserProduct(userProductEntity);
+        int isInserted = userDBMapper.insertUserProduct(userProductEntity);
         if (isInserted <= 0)
             throw new InvestingException(ResultCode.InternalServerError, "error create user data");
 

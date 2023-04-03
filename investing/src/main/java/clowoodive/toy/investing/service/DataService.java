@@ -4,6 +4,7 @@ import clowoodive.toy.investing.entity.ProductInvestingEntity;
 import clowoodive.toy.investing.entity.ProductMetaEntity;
 import clowoodive.toy.investing.entity.UserProductEntity;
 import clowoodive.toy.investing.mapper.InvestingDBMapper;
+import clowoodive.toy.investing.mapper.UserDBMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,14 +14,16 @@ import java.time.LocalDateTime;
 
 @Service
 public class DataService {
-    private final InvestingDBMapper investingDBMapper;
 
+    private final InvestingDBMapper investingDBMapper;
+    private final UserDBMapper userDBMapper;
     @Value("${is_meta_data_init_startup}")
     private boolean isMetaDataInitStartup;
 
     @Autowired
-    public DataService(InvestingDBMapper investingDBMapper) {
+    public DataService(InvestingDBMapper investingDBMapper, UserDBMapper userDBMapper) {
         this.investingDBMapper = investingDBMapper;
+        this.userDBMapper = userDBMapper;
     }
 
     @PostConstruct
@@ -120,12 +123,12 @@ public class DataService {
         userProductEntity.investing_amount = investingAmount;
         userProductEntity.investing_at = investingAt;
 
-        investingDBMapper.insertUserProduct(userProductEntity);
+        userDBMapper.insertUserProduct(userProductEntity);
     }
 
     public void truncateDBAll() {
         investingDBMapper.truncateProductMeta();
         investingDBMapper.truncateProductInvesting();
-        investingDBMapper.truncateUserProduct();
+        userDBMapper.truncateUserProduct();
     }
 }

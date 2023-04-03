@@ -1,5 +1,6 @@
 package clowoodive.toy.investing;
 
+import clowoodive.toy.investing.mapper.UserDBMapper;
 import clowoodive.toy.investing.service.InvestingService;
 import clowoodive.toy.investing.entity.UserProductEntity;
 import clowoodive.toy.investing.entity.ProductInvestingEntity;
@@ -27,6 +28,9 @@ public class Unit_Service_InvestingProductTests {
 
     @Mock
     private InvestingDBMapper investingDBMapper;
+
+    @Mock
+    private UserDBMapper userDBMapper;
 
 
     @Test
@@ -119,7 +123,7 @@ public class Unit_Service_InvestingProductTests {
         userProductEntity.investing_at = now.minusDays(1);
 
         Mockito.when(investingDBMapper.selectProductMeta(anyInt())).thenReturn(productMetaEntity);
-        Mockito.when(investingDBMapper.selectUserProduct(anyLong(), anyInt())).thenReturn(userProductEntity);
+        Mockito.when(userDBMapper.selectUserProduct(anyLong(), anyInt())).thenReturn(userProductEntity);
 
         // when
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));
@@ -145,7 +149,7 @@ public class Unit_Service_InvestingProductTests {
         productMetaEntity.finished_at = now.plusDays(5);
 
         Mockito.when(investingDBMapper.selectProductMeta(anyInt())).thenReturn(productMetaEntity);
-        Mockito.when(investingDBMapper.selectUserProduct(anyLong(), anyInt())).thenReturn(null);
+        Mockito.when(userDBMapper.selectUserProduct(anyLong(), anyInt())).thenReturn(null);
         Mockito.when(investingDBMapper.selectProductInvesting(anyInt())).thenReturn(null);
 
         // when
@@ -177,7 +181,7 @@ public class Unit_Service_InvestingProductTests {
         productInvestingEntity.investing_user_count = 3;
 
         Mockito.when(investingDBMapper.selectProductMeta(anyInt())).thenReturn(productMetaEntity);
-        Mockito.when(investingDBMapper.selectUserProduct(anyLong(), anyInt())).thenReturn(null);
+        Mockito.when(userDBMapper.selectUserProduct(anyLong(), anyInt())).thenReturn(null);
         Mockito.when(investingDBMapper.selectProductInvesting(anyInt())).thenReturn(productInvestingEntity);
 
         // when
@@ -209,7 +213,7 @@ public class Unit_Service_InvestingProductTests {
         productInvestingEntity.investing_user_count = 3;
 
         Mockito.when(investingDBMapper.selectProductMeta(anyInt())).thenReturn(productMetaEntity);
-        Mockito.when(investingDBMapper.selectUserProduct(anyLong(), anyInt())).thenReturn(null);
+        Mockito.when(userDBMapper.selectUserProduct(anyLong(), anyInt())).thenReturn(null);
         Mockito.when(investingDBMapper.selectProductInvesting(anyInt())).thenReturn(productInvestingEntity);
 
         // when
@@ -241,10 +245,10 @@ public class Unit_Service_InvestingProductTests {
         productInvestingEntity.investing_user_count = 3;
 
         Mockito.when(investingDBMapper.selectProductMeta(anyInt())).thenReturn(productMetaEntity);
-        Mockito.when(investingDBMapper.selectUserProduct(anyLong(), anyInt())).thenReturn(null);
+        Mockito.when(userDBMapper.selectUserProduct(anyLong(), anyInt())).thenReturn(null);
         Mockito.when(investingDBMapper.selectProductInvesting(anyInt())).thenReturn(productInvestingEntity);
         Mockito.when(investingDBMapper.updateProductInvesting(anyInt(), anyLong(), anyLong())).thenReturn(1);
-        Mockito.when(investingDBMapper.insertUserProduct(any())).thenReturn(0);
+        Mockito.when(userDBMapper.insertUserProduct(any())).thenReturn(0);
 
         // when
         InvestingException ex = Assertions.assertThrows(InvestingException.class, () -> investingService.investProduct(userId, productId, investingAmount));

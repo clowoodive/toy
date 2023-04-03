@@ -1,6 +1,7 @@
 package clowoodive.toy.investing;
 
 import clowoodive.toy.investing.dto.UserProductDto;
+import clowoodive.toy.investing.mapper.UserDBMapper;
 import clowoodive.toy.investing.service.InvestingService;
 import clowoodive.toy.investing.entity.UserProductEntity;
 import clowoodive.toy.investing.entity.ProductMetaEntity;
@@ -32,13 +33,16 @@ public class Unit_Service_GetUserProductListTests {
     @Mock
     private InvestingDBMapper investingDBMapper;
 
+    @Mock
+    private UserDBMapper userDBMapper;
+
 
     @Test
     @DisplayName("Test_GetUserProductList_WithNoUserProduct_ShouldEmpty")
     void testGetUserProductListWithNoUserProduct() {
         // given
         long userId = 1234;
-        Mockito.when(investingDBMapper.selectUserProductListAll(anyLong())).thenReturn(List.of());
+        Mockito.when(userDBMapper.selectUserProductListAll(anyLong())).thenReturn(List.of());
 
         // when
         List<UserProductDto> userProductDtoList = userService.getUserProducts(userId);
@@ -64,7 +68,7 @@ public class Unit_Service_GetUserProductListTests {
         userProductEntity2.product_id = 2;
         userProductEntityList.add(userProductEntity2);
 
-        Mockito.when(investingDBMapper.selectUserProductListAll(anyLong())).thenReturn(userProductEntityList);
+        Mockito.when(userDBMapper.selectUserProductListAll(anyLong())).thenReturn(userProductEntityList);
         Mockito.when(investingDBMapper.selectProductMetaListByIdList(any())).thenReturn(List.of());
 
         // when
@@ -96,7 +100,7 @@ public class Unit_Service_GetUserProductListTests {
         productMeta.product_id = 1;
         productMetaEntityList.add(productMeta);
 
-        Mockito.when(investingDBMapper.selectUserProductListAll(anyLong())).thenReturn(userProductEntityList);
+        Mockito.when(userDBMapper.selectUserProductListAll(anyLong())).thenReturn(userProductEntityList);
         Mockito.when(investingDBMapper.selectProductMetaListByIdList(any())).thenReturn(productMetaEntityList);
 
         // when

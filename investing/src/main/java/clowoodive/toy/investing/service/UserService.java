@@ -6,6 +6,7 @@ import clowoodive.toy.investing.entity.UserProductEntity;
 import clowoodive.toy.investing.error.InvestingException;
 import clowoodive.toy.investing.error.ResultCode;
 import clowoodive.toy.investing.mapper.InvestingDBMapper;
+import clowoodive.toy.investing.mapper.UserDBMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +19,16 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final InvestingDBMapper investingDBMapper;
+    private final UserDBMapper userDBMapper;
 
     @Autowired
-    public UserService(InvestingDBMapper investingDBMapper) {
+    public UserService(InvestingDBMapper investingDBMapper, UserDBMapper userDBMapper) {
         this.investingDBMapper = investingDBMapper;
+        this.userDBMapper = userDBMapper;
     }
 
     public List<UserProductDto> getUserProducts(long userId) {
-        List<UserProductEntity> userProductEntityList = investingDBMapper.selectUserProductListAll(userId);
+        List<UserProductEntity> userProductEntityList = userDBMapper.selectUserProductListAll(userId);
         if (userProductEntityList.size() == 0)
             return new ArrayList<>();
 

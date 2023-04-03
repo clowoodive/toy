@@ -1,6 +1,7 @@
 package clowoodive.toy.investing;
 
 import clowoodive.toy.investing.entity.UserProductEntity;
+import clowoodive.toy.investing.mapper.UserDBMapper;
 import clowoodive.toy.investing.service.DataService;
 import clowoodive.toy.investing.entity.ProductInvestingEntity;
 import clowoodive.toy.investing.entity.ProductMetaEntity;
@@ -18,6 +19,9 @@ import java.time.LocalDateTime;
 class Unit_RepositoryTests {
     @Autowired
     InvestingDBMapper investingDBMapper;
+
+    @Autowired
+    UserDBMapper userDBMapper;
 
     @Autowired
     DataService dataService;
@@ -84,8 +88,8 @@ class Unit_RepositoryTests {
         userProductEntity.investing_at = now.minusDays(5);
 
         // when
-        int isSuccess = investingDBMapper.insertUserProduct(userProductEntity);
-        var resultUserProductEntity = investingDBMapper.selectUserProduct(userProductEntity.user_id, userProductEntity.product_id);
+        int isSuccess = userDBMapper.insertUserProduct(userProductEntity);
+        var resultUserProductEntity = userDBMapper.selectUserProduct(userProductEntity.user_id, userProductEntity.product_id);
 
         // then
         Assertions.assertTrue(isSuccess == 1);
