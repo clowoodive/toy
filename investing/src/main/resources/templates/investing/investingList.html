@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<body>
+<div layout:fragment="content">
+    <h4 th:text="#{mail.list.title.listAll}">mail list all</h4>
+
+    <a th:href="@{create}" th:text="#{common.link.create}">create</a>
+    <br>
+    <table>
+        <tr>
+            <th th:text="#{mail.list.table.mailIdx}">mailIdx</th>
+            <th th:text="#{mail.list.table.message}">message</th>
+            <th th:text="#{mail.list.table.sendAt}">sendAt</th>
+            <th th:text="#{mail.list.table.expireHour}">expire hour</th>
+            <th th:text="#{mail.list.table.expireAt}">expire at</th>
+            <th th:text="#{mail.list.table.state}">state</th>
+        </tr>
+        <tr th:if="${not #arrays.isEmpty(productList)}" th:each="item,itemStat : ${productList}">
+            <td><a th:href="@{detail(mailIdx=${item.product_id})}" th:text="${item.product_id}">product_id</a></td>
+<!--            <td><a th:href="@{detail(mailIdx=${item.mailIdx})}" th:text="${item.messageList[0].message}">message</a></td>-->
+<!--            <td th:text="*{#temporals.format(item.sendAt, 'yyyy-MM-dd HH:mm')}">sendAt</td>-->
+<!--            <td th:text="${item.expireHour}">expireHour</td>-->
+<!--            <td th:text="*{#temporals.format(item.expireAt, 'yyyy-MM-dd HH:mm')}">expireAt</td>-->
+<!--            <td><span th:if="${listOutput.reservedCheckList[__${itemStat.index}__]}" th:text="#{mail.list.label.reserved}">reserved</span></td>-->
+        </tr>
+    </table>
+    <label th:if="${#arrays.isEmpty(productList)}" th:text="#{common.label.noResult}"></label>
+
+    <!-- prev/next로 페이지 표시-->
+    <br>
+<!--    <form th:if="${listOutput.page.prev}" style="display:inline-block;" action="#" th:action="@{/mail_all/list}" th:object="${listInput}" method="get">-->
+<!--        &lt;!&ndash; 페이지 처리용 필드&ndash;&gt;-->
+<!--        <input type="hidden" name="page.offset" th:value="${listOutput.page.prevOffset}"/>-->
+<!--        <input type="hidden" name="page.limit" th:value="${listOutput.page.limit}"/>-->
+<!--        <input type="submit" th:value="#{common.button.prev}">-->
+<!--    </form>-->
+<!--    <form th:if="${listOutput.page.next}" style="display:inline-block; margin-left:200px;" action="#" th:action="@{/mail_all/list}" th:object="${listInput}" method="get">-->
+<!--        &lt;!&ndash; 페이지 처리용 필드&ndash;&gt;-->
+<!--        <input type="hidden" name="page.offset" th:value="${listOutput.page.nextOffset}"/>-->
+<!--        <input type="hidden" name="page.limit" th:value="${listOutput.page.limit}"/>-->
+<!--        <input type="submit" th:value="#{common.button.next}">-->
+<!--    </form>-->
+</div>
+</body>
+
+</html>

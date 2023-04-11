@@ -6,13 +6,15 @@ import clowoodive.toy.investing.error.InvestingException;
 import clowoodive.toy.investing.error.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
-@RestController
-@RequestMapping(value = "/investing", produces = MediaType.APPLICATION_JSON_VALUE)
+@Controller
+@RequestMapping(value = "/investing")
 public class InvestingController {
 
     public final static String HEADER_USER_ID_KEY = "x-user-id";
@@ -25,8 +27,11 @@ public class InvestingController {
     }
 
     @GetMapping("/products")
-    public List<ProductDto> getProducts() {
-        return investingService.getProducts();
+    public String getProducts(Model model) {
+        List<ProductDto> products = investingService.getProducts();
+
+        model.addAttribute("productList", products);
+        return "investing/investingList";
     }
 
     @PostMapping("/user/products/{product_id}/investing-amount/{investing_amount}")

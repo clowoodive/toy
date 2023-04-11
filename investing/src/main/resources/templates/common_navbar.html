@@ -1,0 +1,77 @@
+<style>
+    nav.navbar0 {
+        padding: 0;
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1030;
+        flex-wrap: nowrap;
+        background-color: #343a40;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    nav.navbar0>a.navbar-brand0 {
+        color: white;
+        padding-top: .75rem;
+        padding-bottom: .75rem;
+        font-size: 1rem;
+        background-color: rgba(0, 0, 0, .25);
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+        margin-right: 0;
+        display: inline-block;
+        line-height: inherit;
+        white-space: nowrap;
+        flex: 0 0 16.666667%;
+        max-width: 16.666667%;
+        position: relative;
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        text-decoration: none;
+        /* background-color: grey; */
+    }
+
+    nav.navbar0>ul.flex-column0 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0;
+        list-style: none;
+        margin-top: 0;
+        /* background-color: grey; */
+    }
+
+    nav.navbar0>ul.flex-column0>li.nav-item0 {
+        white-space: nowrap;
+        list-style: none;
+        /* display: inline-block;
+        background-color: darkgray; */
+    }
+
+    nav.navbar0>ul.flex-column0>li.nav-item0>a.nav-link0 {
+        color: rgba(255,255,255,.5);
+        padding-right: 0;
+        padding-left: 0;
+        display: block;
+        padding: .5rem 1rem;
+        text-decoration: none;
+        background-color: transparent;
+    }
+</style>
+<nav th:fragment="common-navbar" class="navbar0">
+    <a class="navbar-brand0" href="/home" th:text="Home">brand</a>
+<!--    <ul class="flex-column0">-->
+<!--        sec:authorize="isAuthenticated()">-->
+        <!-- <li class="nav-item0">
+            <a class="nav-link0" href="/member/mypage" sec:authentication="name">name</a>
+        </li> -->
+<!--        <li class="nav-item0">-->
+<!--            <a class="nav-link0" href="/logout">Logout <span sec:authentication="name">username</span></a>-->
+<!--        </li>-->
+<!--    </ul>-->
+</nav>

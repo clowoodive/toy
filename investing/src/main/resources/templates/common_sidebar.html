@@ -1,0 +1,124 @@
+<style>
+    nav.sidebar0 {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+        /* Behind the navbar */
+        padding: 48px 0 0;
+        /* Height of navbar */
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        display: block;
+        background-color: #f8f9fa;
+        flex: 0 0 16.666667%;
+        max-width: 16.666667%;
+        width: 100%;
+    }
+
+    nav.sidebar0>div.sidebar-sticky0 {
+        position: relative;
+        top: 0;
+        height: calc(100vh - 48px);
+        padding-top: .5rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+        /* Scrollable contents if viewport is shorter than content. */
+    }
+
+    @supports ((position: -webkit-sticky) or (position: sticky)) {
+        nav.sidebar0>div.sidebar-sticky0 {
+            position: -webkit-sticky;
+            position: sticky;
+        }
+    }
+
+    nav.sidebar0>div.sidebar-sticky0>h6.sidebar-heading0 {
+        font-size: .75rem;
+        text-transform: uppercase;
+        color: #6c757d;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-top: .25rem;
+        margin-bottom: .25rem;
+        display: flex;
+        font-weight: 500;
+        line-height: 1.2;
+    }
+
+    nav.sidebar0>div.sidebar-sticky0>ul.flex-column0 {
+        margin-bottom: 0;
+        flex-direction: column;
+        display: flex;
+        flex-wrap: wrap;
+        padding-left: 0;
+        list-style: none;
+        margin-top: 0;
+    }
+
+    /* nav.sidebar0>div.sidebar-sticky0>ul.flex-column0>li.nav-item0 {
+        list-style: none;
+    } */
+
+    nav.sidebar0>div.sidebar-sticky0>ul.flex-column0>li.nav-item0>a.nav-link0 {
+        font-weight: 500;
+        color: #333;
+        display: block;
+        padding: .25rem 1rem .25rem 2rem;
+        /* padding: .25rem 1rem .25rem 2rem; */
+        text-decoration: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+</style>
+<nav th:fragment="common-sidebar" class="sidebar0">
+    <div class="sidebar-sticky0">
+        <!--        sec:authorize="isAuthenticated()">-->
+        <!-- <h6 class="sidebar-heading0" th:text="#{sidebar.category.user}">user</h6>
+        <ul class="flex-column0">
+            <li class="nav-item0">
+                <a class="nav-link0" href="/user/search" th:text="#{sidebar.label.userSearch}">user search</a>
+            </li>
+        </ul> -->
+        <h6 class="sidebar-heading0" th:text="#{sidebar.category.management}">Customer</h6>
+        <ul class="flex-column0">
+            <li class="nav-item0">
+                <a class="nav-link0" href="/investing/products" th:text="#{sidebar.label.products}">products</a>
+            </li>
+<!--            <li class="nav-item0">-->
+<!--                <a class="nav-link0" href="/guild" th:text="#{sidebar.label.guildSearch}">guildSearch</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item0">-->
+<!--                <a class="nav-link0" href="/action_log" th:text="#{sidebar.label.actionLog}">actionLog</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item0">-->
+<!--                <a class="nav-link0" href="/kickout" th:text="#{sidebar.label.kickout}">kickout</a>-->
+<!--            </li>-->
+            <!--            <li class="nav-item0" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">-->
+            <!--                <a class="nav-link0" href="/mail_all" th:text="#{sidebar.label.mailAll}">mailAll</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item0" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">-->
+            <!--                <a class="nav-link0" href="/mail_user" th:text="#{sidebar.label.mailUser}">mailUser</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item0" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">-->
+            <!--                <a class="nav-link0" href="/notice" th:text="#{sidebar.label.notice}">notice</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item0" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">-->
+            <!--                <a class="nav-link0" href="/data_upload" th:text="#{sidebar.label.dataUpload}">dataUpload</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item0" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')">-->
+            <!--                <a class="nav-link0" href="/server" th:text="#{sidebar.label.server}">dataUpload</a>-->
+            <!--            </li>-->
+        </ul>
+        <h6 class="sidebar-heading0">misc</h6>
+        <!--        <ul class="flex-column0">-->
+        <!--            <li class="nav-item0">-->
+        <!--                <a class="nav-link0" href="/my_info" th:text="#{sidebar.label.myInfo}">myInfo</a>-->
+        <!--            </li>-->
+        <!--            <li class="nav-item0" sec:authorize="hasRole('ROLE_ADMIN')">-->
+        <!--                <a class="nav-link0" href="/member" th:text="#{sidebar.label.member}">member</a>-->
+        <!--            </li>-->
+        <!--        </ul>-->
+    </div>
+</nav>
