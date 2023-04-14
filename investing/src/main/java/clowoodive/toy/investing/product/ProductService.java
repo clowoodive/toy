@@ -1,4 +1,4 @@
-package clowoodive.toy.investing.service;
+package clowoodive.toy.investing.product;
 
 import clowoodive.toy.investing.dto.ProductDto;
 import clowoodive.toy.investing.entity.ProductInvestingEntity;
@@ -16,17 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
-public class InvestingService {
+public class ProductService {
 
     private final InvestingDBMapper investingDBMapper;
     private final UserDBMapper userDBMapper;
 
     @Autowired
-    public InvestingService(InvestingDBMapper investingDBMapper, UserDBMapper userDBMapper) {
+    public ProductService(InvestingDBMapper investingDBMapper, UserDBMapper userDBMapper) {
         this.investingDBMapper = investingDBMapper;
         this.userDBMapper = userDBMapper;
     }

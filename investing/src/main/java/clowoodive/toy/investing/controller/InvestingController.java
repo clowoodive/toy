@@ -5,10 +5,10 @@ import clowoodive.toy.investing.service.InvestingService;
 import clowoodive.toy.investing.error.InvestingException;
 import clowoodive.toy.investing.error.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
@@ -28,9 +28,20 @@ public class InvestingController {
 
     @GetMapping("/products")
     public String getProducts(Model model) {
-        List<ProductDto> products = investingService.getProducts();
+        List<ProductDto> productDtos = investingService.getProducts();
 
-        model.addAttribute("productList", products);
+        model.addAttribute("productList", productDtos);
+
+        return "investing/productList";
+    }
+
+    @GetMapping("/products/{productId}")
+    public String getProductsDetail(@PathVariable("productId") int productId, Model model) {
+        ModelAndView mav = new ModelAndView("investing/productDetail");
+        ProductDto productDto = investingService.getProductsById(productId);
+
+        model.addAttribute("product", productDto);
+
         return "investing/investingList";
     }
 

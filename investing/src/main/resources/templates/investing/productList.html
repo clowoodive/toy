@@ -1,0 +1,53 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">-->
+
+<!--<body>-->
+<!--<div layout:fragment="content">-->
+<!--    <h4 th:text="#{investing.list.title.listAll}"></h4>-->
+
+<!--    <br>-->
+<!--    <table>-->
+<!--        <tr>-->
+<!--            <th th:text="#{investing.list.productId}"></th>-->
+<!--            <th th:text="#{investing.list.title}"></th>-->
+<!--            <th th:text="#{investing.list.totalInvestingAmount}"></th>-->
+<!--            <th th:text="#{investing.list.accumInvestingAmount}"></th>-->
+<!--            <th th:text="#{investing.list.investingUserCount}"></th>-->
+<!--            <th th:text="#{investing.list.openAt}"></th>-->
+<!--            <th th:text="#{investing.list.closeAt}"></th>-->
+<!--        </tr>-->
+<!--        <tr th:if="${not #arrays.isEmpty(productList)}" th:each="item,itemStat : ${productList}">-->
+<!--            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.productId}"></a></td>-->
+<!--            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.title}"></a></td>-->
+<!--            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.totalInvestingAmount}"></a></td>-->
+<!--            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.accumInvestingAmount}"></a></td>-->
+<!--            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.investingUserCount}"></a></td>-->
+<!--            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.openAt}"></a></td>-->
+<!--            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.closeAt}"></a></td>-->
+<!--&lt;!&ndash;            <td><a th:href="@{detail(mailIdx=${item.mailIdx})}" th:text="${item.messageList[0].message}">message</a></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="*{#temporals.format(item.sendAt, 'yyyy-MM-dd HH:mm')}">sendAt</td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${item.expireHour}">expireHour</td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="*{#temporals.format(item.expireAt, 'yyyy-MM-dd HH:mm')}">expireAt</td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td><span th:if="${listOutput.reservedCheckList[__${itemStat.index}__]}" th:text="#{mail.list.label.reserved}">reserved</span></td>&ndash;&gt;-->
+<!--        </tr>-->
+<!--    </table>-->
+<!--    <label th:if="${#arrays.isEmpty(productList)}" th:text="#{common.label.noResult}"></label>-->
+
+<!--    &lt;!&ndash; prev/next로 페이지 표시&ndash;&gt;-->
+<!--    <br>-->
+<!--&lt;!&ndash;    <form th:if="${listOutput.page.prev}" style="display:inline-block;" action="#" th:action="@{/mail_all/list}" th:object="${listInput}" method="get">&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; 페이지 처리용 필드&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="hidden" name="page.offset" th:value="${listOutput.page.prevOffset}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="hidden" name="page.limit" th:value="${listOutput.page.limit}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="submit" th:value="#{common.button.prev}">&ndash;&gt;-->
+<!--&lt;!&ndash;    </form>&ndash;&gt;-->
+<!--&lt;!&ndash;    <form th:if="${listOutput.page.next}" style="display:inline-block; margin-left:200px;" action="#" th:action="@{/mail_all/list}" th:object="${listInput}" method="get">&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; 페이지 처리용 필드&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="hidden" name="page.offset" th:value="${listOutput.page.nextOffset}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="hidden" name="page.limit" th:value="${listOutput.page.limit}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="submit" th:value="#{common.button.next}">&ndash;&gt;-->
+<!--&lt;!&ndash;    </form>&ndash;&gt;-->
+<!--</div>-->
+<!--</body>-->
+
+<!--</html>-->

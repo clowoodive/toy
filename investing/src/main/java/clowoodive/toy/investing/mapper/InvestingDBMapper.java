@@ -17,7 +17,7 @@ public interface InvestingDBMapper {
             "started_at = #{started_at}, finished_at = #{finished_at}")
     int insertOrUpdateProductMeta(ProductMetaEntity productMetaEntity);
 
-    @Select("SELECT * FROM product_meta WHERE started_at <= #{now} AND finished_at >= #{now}")
+    @Select("SELECT * FROM product WHERE started_at <= #{now} AND finished_at >= #{now}")
     List<ProductMetaEntity> selectProductMetaListValid(@Param("now") LocalDateTime now);
 
     @Select("SELECT * FROM product_meta WHERE product_id = #{product_id}")

@@ -1,3 +1,7 @@
+DROP TABLE product_meta;
+DROP TABLE product;
+DROP TABLE user_investing;
+
 -- product meta
 CREATE TABLE IF NOT EXISTS `product_meta` (
 `product_id` int(11) NOT NULL,
@@ -11,8 +15,12 @@ PRIMARY KEY (`product_id`)
 -- product investing data
 CREATE TABLE IF NOT EXISTS `product` (
 `product_id` int(11) NOT NULL,
+`title` varchar(45) NOT NULL,
+`total_investing_amount` bigint(20) NOT NULL,
 `accumulated_investing_amount` bigint(20) NOT NULL,
 `investing_user_count` int(11) NOT NULL,
+`started_at` datetime(4) NOT NULL,
+`finished_at` datetime(4) NOT NULL,
 PRIMARY KEY (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

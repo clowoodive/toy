@@ -2,14 +2,12 @@ package clowoodive.toy.investing;
 
 import clowoodive.toy.investing.dto.UserProductDto;
 import clowoodive.toy.investing.mapper.UserDBMapper;
-import clowoodive.toy.investing.service.InvestingService;
 import clowoodive.toy.investing.entity.UserProductEntity;
 import clowoodive.toy.investing.entity.ProductMetaEntity;
 import clowoodive.toy.investing.error.InvestingException;
 import clowoodive.toy.investing.error.ResultCode;
 import clowoodive.toy.investing.mapper.InvestingDBMapper;
 import clowoodive.toy.investing.service.UserService;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

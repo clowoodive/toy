@@ -3,21 +3,27 @@
 
 <body>
 <div layout:fragment="content">
-    <h4 th:text="#{mail.list.title.listAll}">mail list all</h4>
+    <h4 th:text="#{investing.list.title.listAll}"></h4>
 
-    <a th:href="@{create}" th:text="#{common.link.create}">create</a>
     <br>
     <table>
         <tr>
-            <th th:text="#{mail.list.table.mailIdx}">mailIdx</th>
-            <th th:text="#{mail.list.table.message}">message</th>
-            <th th:text="#{mail.list.table.sendAt}">sendAt</th>
-            <th th:text="#{mail.list.table.expireHour}">expire hour</th>
-            <th th:text="#{mail.list.table.expireAt}">expire at</th>
-            <th th:text="#{mail.list.table.state}">state</th>
+            <th th:text="#{investing.list.productId}"></th>
+            <th th:text="#{investing.list.title}"></th>
+            <th th:text="#{investing.list.totalInvestingAmount}"></th>
+            <th th:text="#{investing.list.accumInvestingAmount}"></th>
+            <th th:text="#{investing.list.investingUserCount}"></th>
+            <th th:text="#{investing.list.openAt}"></th>
+            <th th:text="#{investing.list.closeAt}"></th>
         </tr>
         <tr th:if="${not #arrays.isEmpty(productList)}" th:each="item,itemStat : ${productList}">
-            <td><a th:href="@{detail(mailIdx=${item.product_id})}" th:text="${item.product_id}">product_id</a></td>
+            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.productId}"></a></td>
+            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.title}"></a></td>
+            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.totalInvestingAmount}"></a></td>
+            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.accumInvestingAmount}"></a></td>
+            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.investingUserCount}"></a></td>
+            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.openAt}"></a></td>
+            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.closeAt}"></a></td>
 <!--            <td><a th:href="@{detail(mailIdx=${item.mailIdx})}" th:text="${item.messageList[0].message}">message</a></td>-->
 <!--            <td th:text="*{#temporals.format(item.sendAt, 'yyyy-MM-dd HH:mm')}">sendAt</td>-->
 <!--            <td th:text="${item.expireHour}">expireHour</td>-->

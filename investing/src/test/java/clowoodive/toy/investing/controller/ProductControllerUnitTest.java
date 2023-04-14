@@ -2,6 +2,7 @@ package clowoodive.toy.investing.controller;
 
 import clowoodive.toy.investing.dto.ProductDto;
 import clowoodive.toy.investing.error.ResultCode;
+import clowoodive.toy.investing.product.ProductController;
 import clowoodive.toy.investing.service.InvestingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -23,14 +25,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(InvestingController.class)
-class InvestingControllerUnitTest {
+@WebMvcTest(ProductController.class)
+class ProductControllerUnitTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    InvestingService investingService;
+    InvestingService productService;
 
     private long userId;
 
@@ -51,31 +53,43 @@ class InvestingControllerUnitTest {
         // given
         ProductDto productDto1 = new ProductDto();
         productDto1.setProductId(123);
+        productDto1.setTitle("first product");
         ProductDto productDto2 = new ProductDto();
         productDto2.setProductId(456);
+        productDto2.setTitle("second product");
 
-        given(investingService.getProducts()).willReturn(Arrays.asList(productDto1, productDto2));
+        given(productService.getProducts()).willReturn(Arrays.asList(productDto1, productDto2));
 
         // when
         var resultActions = mockMvc.perform(
-                get("/investing/products")
-                        .accept(MediaType.APPLICATION_JSON)
+                get("/products")
         );
 
         // then
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].product_id").value("123"))
-                .andExpect(jsonPath("$[1].product_id").value("456"));
-        then(investingService).should(times(1)).getProducts();
+                .andExpect(view().name("product/productList"))
+                .andExpect(model().attribute("productList", hasSize(2)))
+                .andExpect(model().attribute("productList", hasItem(
+                        allOf(
+                                hasProperty("productId", is(123)),
+                                hasProperty("title", is("first product"))
+                        )
+                )))
+                .andExpect(model().attribute("productList", hasItem(
+                        allOf(
+                                hasProperty("productId", is(456)),
+                                hasProperty("title", is("second product"))
+                        )
+                )));
+        then(productService).should(times(1)).getProducts();
     }
 
     @Test
     @DisplayName("상품 투자")
     void testInvestProduct() throws Exception {
         // given
-        given(investingService.investProduct(anyLong(), anyInt(), anyLong())).willReturn(this.productId);
+        given(productService.investProduct(anyLong(), anyInt(), anyLong())).willReturn(this.productId);
 
         // when
         var resultActions = mockMvc.perform(
@@ -86,7 +100,7 @@ class InvestingControllerUnitTest {
 
         // then
         resultActions.andExpect(status().isOk());
-        then(investingService).should(times(1)).investProduct(anyLong(), anyInt(), anyLong());
+        then(productService).should(times(1)).investProduct(anyLong(), anyInt(), anyLong());
     }
 
     @Test
