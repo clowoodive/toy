@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+
+<body>
+<div layout:fragment="content">
+    <h4 th:text="#{product.edit.page.title}">product edit title</h4>
+
+    <form action="#" th:object="${product}" method="post">
+        <label th:text="#{product.label.productId}">productid</label>
+        <div><span th:text="*{productId}">productid</span></div>
+        <label th:text="#{product.label.title}">title</label>
+        <div><span th:text="*{title}">title</span></div>
+        <!--        <input th:replace="~{fragments/inputField :: input ('ProductId', 'productId', 'text')}" />-->
+        <!--        <input th:replace="~{fragments/inputField :: input ('Title', 'title', 'text')}" />-->
+        <input th:replace="~{fragments/inputField :: input (#{product.label.totalInvestingAmount}, 'totalInvestingAmount', 'text')}"/>
+        <input th:replace="~{fragments/inputField :: input (#{product.label.accumInvestingAmount}, 'accumInvestingAmount', 'text')}"/>
+        <input th:replace="~{fragments/inputField :: input (#{product.label.investingUserCount}, 'investingUserCount', 'text')}"/>
+        <input th:replace="~{fragments/inputField :: input (#{product.label.openAt}, 'openAt', 'date-time')}"/>
+        <input th:replace="~{fragments/inputField :: input (#{product.label.closeAt}, 'closeAt', 'date-time')}"/>
+        <!--        role:-->
+        <!--        <select name="role">-->
+        <!--            <option value="ROLE_CS" th:selected="${editOutput.role=='ROLE_CS'}">ROLE_CS</option>-->
+        <!--            <option value="ROLE_MEMBER" th:selected="${editOutput.role=='ROLE_MEMBER'}">ROLE_MEMBER</option>-->
+        <!--            <option value="ROLE_ADMIN" th:selected="${editOutput.role=='ROLE_ADMIN'}">ROLE_ADMIN</option>-->
+        <!--        </select><br>-->
+        <!--        isEnabled:-->
+        <!--        <select name="isEnabled">-->
+        <!--            <option value="1" th:selected="${editOutput.isEnabled==true}">True</option>-->
+        <!--            <option value="0" th:selected="${editOutput.isEnabled==false}">False</option>-->
+        <!--        </select><br>-->
+        <input type="submit" th:value="#{common.button.save}">
+    </form>
+    <br>
+    <!--    <form action="#" th:action="@{delete}" method="post" onsubmit="return confirm('Are you sure you wish to delete?');">-->
+    <!--        <input type="hidden" name="memberIdx" th:value="${editOutput.memberIdx}"/>-->
+    <!--        <input type="submit" th:value="#{common.button.delete}">-->
+    <!--    </form>-->
+</div>
+</body>
+
+</html>

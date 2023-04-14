@@ -1,7 +1,7 @@
 package clowoodive.toy.investing;
 
 import clowoodive.toy.investing.mapper.UserDBMapper;
-import clowoodive.toy.investing.service.InvestingService;
+import clowoodive.toy.investing.product.ProductService;
 import clowoodive.toy.investing.entity.UserProductEntity;
 import clowoodive.toy.investing.entity.ProductInvestingEntity;
 import clowoodive.toy.investing.entity.ProductMetaEntity;
@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.*;
 @ExtendWith(MockitoExtension.class)
 public class Unit_Service_InvestingProductTests {
     @InjectMocks
-    private InvestingService investingService;
+    private ProductService investingService;
 
     @Mock
     private InvestingDBMapper investingDBMapper;

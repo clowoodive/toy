@@ -2,7 +2,7 @@ package clowoodive.toy.investing.controller;
 
 import clowoodive.toy.investing.dto.ProductDto;
 import clowoodive.toy.investing.error.ResultCode;
-import clowoodive.toy.investing.service.InvestingService;
+import clowoodive.toy.investing.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class InvestingControllerUnitTest {
     MockMvc mockMvc;
 
     @MockBean
-    InvestingService investingService;
+    ProductService investingService;
 
     private long userId;
 

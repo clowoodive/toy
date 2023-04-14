@@ -1,7 +1,7 @@
 package clowoodive.toy.investing;
 
 import clowoodive.toy.investing.dto.ProductDto;
-import clowoodive.toy.investing.service.InvestingService;
+import clowoodive.toy.investing.product.ProductService;
 import clowoodive.toy.investing.entity.ProductInvestingEntity;
 import clowoodive.toy.investing.entity.ProductMetaEntity;
 import clowoodive.toy.investing.error.InvestingException;
@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 @ExtendWith(MockitoExtension.class)
 public class Unit_Service_GetProductListTests {
     @InjectMocks
-    private InvestingService investingService;
+    private ProductService investingService;
 
     @Mock
     private InvestingDBMapper investingDBMapper;

@@ -1,24 +1,30 @@
 package clowoodive.toy.investing.product;
 
 import clowoodive.toy.investing.dto.ProductDto;
-import clowoodive.toy.investing.service.InvestingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @RequestMapping(value = "/products")
 public class ProductController {
 
-    private final InvestingService productService;
+    private final ProductService productService;
 
     @Autowired
-    public ProductController(InvestingService productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
+    }
+
+    @ModelAttribute("productDto")
+    public ProductDto findProduct(@PathVariable(name = "productId", required = false) Integer productId) {
+        return productId == null ? new ProductDto() : this.productService.getProductsById(productId);
     }
 
     @GetMapping("")
@@ -30,14 +36,34 @@ public class ProductController {
         return "product/productList";
     }
 
-    @GetMapping("/products/{productId}")
-    public String getProductsDetail(@PathVariable("productId") int productId, Model model) {
-        ModelAndView mav = new ModelAndView("investing/productDetail");
-        ProductDto productDto = productService.getProductsById(productId);
+    @GetMapping("/{productId}")
+    public String getProductDetail(ProductDto productDto, Model model) {
+//        ProductDto productDto = productService.getProductsById(productId);
 
         model.addAttribute("product", productDto);
 
-        return "investing/investingList";
+        return "product/productDetail";
+    }
+
+    @GetMapping("/{productId}/edit")
+    public String showProductEditForm(ProductDto productDto, Model model) {
+//        ProductDto productDto = productService.getProductsById(productId);
+
+        model.addAttribute("product", productDto);
+
+        return "product/productEditForm";
+    }
+
+    @PostMapping("/{productId}/edit")
+    public String saveProductEditForm(@Valid ProductDto productDto, BindingResult result, ModelMap model) {
+        if (result.hasErrors()) {
+            model.put("product", productDto);
+            return "product/productEditForm";
+        }
+
+        productService.updateProduct(productDto);
+
+        return "redirect:/products";
     }
 
 //    @PostMapping("/user/products/{product_id}/investing-amount/{investing_amount}")

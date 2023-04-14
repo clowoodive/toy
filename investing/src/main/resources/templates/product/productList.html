@@ -3,18 +3,18 @@
 
 <body>
 <div layout:fragment="content">
-    <h4 th:text="#{investing.list.title.listAll}"></h4>
+    <h4 th:text="#{product.list.page.title}">product list title</h4>
 
     <br>
     <table>
         <tr>
-            <th th:text="#{investing.list.productId}"></th>
-            <th th:text="#{investing.list.title}"></th>
-            <th th:text="#{investing.list.totalInvestingAmount}"></th>
-            <th th:text="#{investing.list.accumInvestingAmount}"></th>
-            <th th:text="#{investing.list.investingUserCount}"></th>
-            <th th:text="#{investing.list.openAt}"></th>
-            <th th:text="#{investing.list.closeAt}"></th>
+            <th th:text="#{product.list.productId}"></th>
+            <th th:text="#{product.list.title}"></th>
+            <th th:text="#{product.list.totalInvestingAmount}"></th>
+            <th th:text="#{product.list.accumInvestingAmount}"></th>
+            <th th:text="#{product.list.investingUserCount}"></th>
+            <th th:text="#{product.list.openAt}"></th>
+            <th th:text="#{product.list.closeAt}"></th>
         </tr>
         <tr th:if="${not #arrays.isEmpty(productList)}" th:each="item,itemStat : ${productList}">
             <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.productId}"></a></td>

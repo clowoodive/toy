@@ -1,7 +1,7 @@
 package clowoodive.toy.investing.controller;
 
 import clowoodive.toy.investing.dto.ProductDto;
-import clowoodive.toy.investing.service.InvestingService;
+import clowoodive.toy.investing.product.ProductService;
 import clowoodive.toy.investing.error.InvestingException;
 import clowoodive.toy.investing.error.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ public class InvestingController {
 
     public final static String HEADER_USER_ID_KEY = "x-user-id";
 
-    private final InvestingService investingService;
+    private final ProductService investingService;
 
     @Autowired
-    public InvestingController(InvestingService investingService) {
+    public InvestingController(ProductService investingService) {
         this.investingService = investingService;
     }
 

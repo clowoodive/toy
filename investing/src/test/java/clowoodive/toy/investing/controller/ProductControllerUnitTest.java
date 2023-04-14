@@ -3,16 +3,18 @@ package clowoodive.toy.investing.controller;
 import clowoodive.toy.investing.dto.ProductDto;
 import clowoodive.toy.investing.error.ResultCode;
 import clowoodive.toy.investing.product.ProductController;
-import clowoodive.toy.investing.service.InvestingService;
+import clowoodive.toy.investing.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.*;
@@ -29,10 +31,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ProductControllerUnitTest {
 
     @Autowired
+    MessageSource messageSource;
+
+    @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    InvestingService productService;
+    ProductService productService;
 
     private long userId;
 
@@ -82,6 +87,26 @@ class ProductControllerUnitTest {
                                 hasProperty("title", is("second product"))
                         )
                 )));
+        then(productService).should(times(1)).getProducts();
+    }
+
+    @Test
+    @DisplayName("상품 투자 정보_데이터 없음")
+    void testGetProducts_empty() throws Exception {
+        // given
+        String noResultMsg = messageSource.getMessage("common.label.noResult", null, null);
+        given(productService.getProducts()).willReturn(new ArrayList<>()); // null 리턴해도 동일함
+
+        // when
+        var resultActions = mockMvc.perform(
+                get("/products")
+        );
+
+        // then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("productList", hasSize(0)))
+                .andExpect(content().string(containsString(noResultMsg)));
         then(productService).should(times(1)).getProducts();
     }
 
