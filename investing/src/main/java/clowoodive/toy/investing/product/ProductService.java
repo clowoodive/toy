@@ -67,12 +67,22 @@ public class ProductService {
         return new ProductDto(productMetaEntity, isInvestingClosed);
     }
 
+    public int getNextProductId() {
+        return investingDBMapper.selectNextProductId();
+    }
+
     @Transactional
     public void updateProduct(ProductDto productDto){
 
         ProductMetaEntity productEntity = new ProductMetaEntity(productDto);
 
         this.investingDBMapper.insertOrUpdateProductMeta(productEntity);
+    }
+
+    @Transactional
+    public void deleteProduct(ProductDto productDto){
+
+        int result = this.investingDBMapper.deleteProductById(productDto.productId);
     }
 
     @Transactional

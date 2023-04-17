@@ -35,9 +35,15 @@
             <td th:text="*{closeAt}"></td>
         </tr>
     </table>
+    <td>
+        <form action="#" th:action="@{__${productDto.productId}__/delete}" method="post" onsubmit="return confirm('Are you sure you wish to delete?');">
+            <input type="hidden" name="productId" th:value="${productId}">
+            <input type="submit" value="Delete">
+        </form>
+    </td>
 
-    <div><a th:href="@{__${productDto.productId}__/edit}" class="btn btn-primary">Edit</a></div>
-    <div><a th:href="@{/products}" class="btn btn-primary">Back to List</a></div>
+    <div><a th:href="@{__${productDto.productId}__/edit}">Edit</a></div>
+    <div><a th:href="@{/products}">Back to List</a></div>
 </div>
 </body>
 

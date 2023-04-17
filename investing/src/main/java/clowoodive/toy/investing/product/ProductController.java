@@ -4,7 +4,6 @@ import clowoodive.toy.investing.dto.ProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -46,49 +45,42 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     public String getProductDetail(ProductDto productDto, Model model) {
-//        ProductDto productDto = productService.getProductsById(productId);
-
-        model.addAttribute("productDto", productDto);
 
         return "products/productDetail";
     }
 
     @GetMapping("/create")
-    public String showCreateProductForm(ProductDto productDto, Model model){
-
-        model.addAttribute("productDto", productDto);
+    public String showCreateProductForm(ProductDto productDto, Model model) {
 
         return VIEW_PRODUCT_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping("/create")
-    public String showCreateProductForm(ProductDto productDto, BindingResult result, Model model){
+    public String createProductForm(@Valid ProductDto productDto, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
-//            model.addAttribute("productDto", productDto);
             return VIEW_PRODUCT_CREATE_OR_UPDATE_FORM;
         }
+
+        int nextProductId = productService.getNextProductId();
+        productDto.setProductId(nextProductId);
 
         productService.updateProduct(productDto);
 
         return "redirect:/products";
     }
 
-
     @GetMapping("/{productId}/edit")
     public String showUpdateProductForm(ProductDto productDto, Model model) {
-//        ProductDto productDto = productService.getProductsById(productId);
-
-        model.addAttribute("product", productDto);
 
         return VIEW_PRODUCT_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping("/{productId}/edit")
-    public String saveUpdateProductForm(@Valid ProductDto productDto, BindingResult result, Model model) {
+    public String updateProductForm(@Valid ProductDto productDto, BindingResult result, Model model) {
+        // InitBinder에서 ProductId를 제외하고 바인딩,  @ModelAttribute("productDto")에서 ProductId를 가져와서 대입해줌
 
         if (result.hasErrors()) {
-            model.addAttribute("product", productDto);
             return VIEW_PRODUCT_CREATE_OR_UPDATE_FORM;
         }
 
@@ -96,6 +88,15 @@ public class ProductController {
 
         return "redirect:/products";
     }
+
+    @PostMapping("/{productId}/delete")
+    public String deleteProduct(ProductDto productDto, Model model) {
+
+        productService.deleteProduct(productDto);
+
+        return "redirect:/products";
+    }
+
 
 //    @PostMapping("/user/products/{product_id}/investing-amount/{investing_amount}")
 //    public void investProduct(@RequestHeader Map<String, String> headers, @PathVariable("product_id") int productId,

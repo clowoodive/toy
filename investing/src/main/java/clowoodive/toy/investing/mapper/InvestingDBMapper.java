@@ -50,11 +50,17 @@ public interface InvestingDBMapper {
     @Select("SELECT * FROM product WHERE product_id = #{product_id}")
     ProductInvestingEntity selectProductInvesting(@Param("product_id") int productId);
 
+    @Select("SELECT MAX(product_id) +  1 FROM product")
+    int selectNextProductId();
+
     @Update("UPDATE product " +
             "SET accumulated_investing_amount = accumulated_investing_amount + #{add_investing_amount}, investing_user_count = investing_user_count + 1 " +
             "WHERE product_id = #{product_id} AND (accumulated_investing_amount + #{add_investing_amount}) <= #{total_investing_amount}")
     int updateProductInvesting(@Param("product_id") int productId, @Param("add_investing_amount") long addInvestingAmount,
                                @Param("total_investing_amount") long totalInvestingAmount);
+
+    @Delete("DELETE FROM product WHERE product_id = #{product_id}")
+    int deleteProductById(@Param("product_id") int productId);
 
 
 //    // UserProductEntity

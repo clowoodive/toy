@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ProductDto {
-    
+
     public int productId;
 
     @Size(min = 1, max = 45)
@@ -35,8 +35,10 @@ public class ProductDto {
     public boolean isInvestingAmountFull;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @NotNull
     public LocalDateTime openAt;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @NotNull
     public LocalDateTime closeAt;
 
     public ProductDto(ProductMetaEntity productMeta, boolean isInvestingAmountFull) {
