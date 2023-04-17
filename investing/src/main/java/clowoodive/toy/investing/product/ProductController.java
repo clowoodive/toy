@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,11 +16,18 @@ import java.util.List;
 @RequestMapping(value = "/products")
 public class ProductController {
 
+    private static final String VIEW_PRODUCT_CREATE_OR_UPDATE_FORM = "products/createOrUpdateProductForm";
+
     private final ProductService productService;
 
     @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
+    }
+
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("productId");
     }
 
     @ModelAttribute("productDto")
@@ -31,34 +39,57 @@ public class ProductController {
     public String getProducts(Model model) {
         List<ProductDto> productDtos = productService.getProducts();
 
-        model.addAttribute("productList", productDtos);
+        model.addAttribute("productDtos", productDtos);
 
-        return "product/productList";
+        return "products/productList";
     }
 
     @GetMapping("/{productId}")
     public String getProductDetail(ProductDto productDto, Model model) {
 //        ProductDto productDto = productService.getProductsById(productId);
 
-        model.addAttribute("product", productDto);
+        model.addAttribute("productDto", productDto);
 
-        return "product/productDetail";
+        return "products/productDetail";
     }
 
+    @GetMapping("/create")
+    public String showCreateProductForm(ProductDto productDto, Model model){
+
+        model.addAttribute("productDto", productDto);
+
+        return VIEW_PRODUCT_CREATE_OR_UPDATE_FORM;
+    }
+
+    @PostMapping("/create")
+    public String showCreateProductForm(ProductDto productDto, BindingResult result, Model model){
+
+        if (result.hasErrors()) {
+//            model.addAttribute("productDto", productDto);
+            return VIEW_PRODUCT_CREATE_OR_UPDATE_FORM;
+        }
+
+        productService.updateProduct(productDto);
+
+        return "redirect:/products";
+    }
+
+
     @GetMapping("/{productId}/edit")
-    public String showProductEditForm(ProductDto productDto, Model model) {
+    public String showUpdateProductForm(ProductDto productDto, Model model) {
 //        ProductDto productDto = productService.getProductsById(productId);
 
         model.addAttribute("product", productDto);
 
-        return "product/productEditForm";
+        return VIEW_PRODUCT_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping("/{productId}/edit")
-    public String saveProductEditForm(@Valid ProductDto productDto, BindingResult result, ModelMap model) {
+    public String saveUpdateProductForm(@Valid ProductDto productDto, BindingResult result, Model model) {
+
         if (result.hasErrors()) {
-            model.put("product", productDto);
-            return "product/productEditForm";
+            model.addAttribute("product", productDto);
+            return VIEW_PRODUCT_CREATE_OR_UPDATE_FORM;
         }
 
         productService.updateProduct(productDto);

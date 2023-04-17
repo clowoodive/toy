@@ -5,13 +5,13 @@
 <div layout:fragment="content">
     <h4 th:text="#{product.edit.page.title}">product edit title</h4>
 
-    <form action="#" th:object="${product}" method="post">
-        <label th:text="#{product.label.productId}">productid</label>
-        <div><span th:text="*{productId}">productid</span></div>
-        <label th:text="#{product.label.title}">title</label>
-        <div><span th:text="*{title}">title</span></div>
-        <!--        <input th:replace="~{fragments/inputField :: input ('ProductId', 'productId', 'text')}" />-->
-        <!--        <input th:replace="~{fragments/inputField :: input ('Title', 'title', 'text')}" />-->
+    <form action="#" th:object="${productDto}" method="post">
+        <label th:if="*{productId} > 0" th:text="#{product.label.productId}">productid</label>
+        <div><span th:if="*{productId} > 0" th:text="*{productId}">productid</span></div>
+
+<!--        <label th:text="#{product.label.title}">title</label>-->
+<!--        <div><span th:text="*{title}">title</span></div>-->
+        <input th:replace="~{fragments/inputField :: input (#{product.label.title}, 'title', 'text')}"/>
         <input th:replace="~{fragments/inputField :: input (#{product.label.totalInvestingAmount}, 'totalInvestingAmount', 'text')}"/>
         <input th:replace="~{fragments/inputField :: input (#{product.label.accumInvestingAmount}, 'accumInvestingAmount', 'text')}"/>
         <input th:replace="~{fragments/inputField :: input (#{product.label.investingUserCount}, 'investingUserCount', 'text')}"/>

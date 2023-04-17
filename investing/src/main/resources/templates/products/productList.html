@@ -16,7 +16,7 @@
             <th th:text="#{product.list.openAt}"></th>
             <th th:text="#{product.list.closeAt}"></th>
         </tr>
-        <tr th:if="${not #arrays.isEmpty(productList)}" th:each="item,itemStat : ${productList}">
+        <tr th:if="${not #arrays.isEmpty(productDtos)}" th:each="item,itemStat : ${productDtos}">
             <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.productId}"></a></td>
             <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.title}"></a></td>
             <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.totalInvestingAmount}"></a></td>
@@ -31,7 +31,8 @@
 <!--            <td><span th:if="${listOutput.reservedCheckList[__${itemStat.index}__]}" th:text="#{mail.list.label.reserved}">reserved</span></td>-->
         </tr>
     </table>
-    <label th:if="${#arrays.isEmpty(productList)}" th:text="#{common.label.noResult}"></label>
+    <a th:href="@{products/create}">create</a>
+    <label th:if="${#arrays.isEmpty(productDtos)}" th:text="#{common.label.noResult}"></label>
 
     <!-- prev/next로 페이지 표시-->
     <br>

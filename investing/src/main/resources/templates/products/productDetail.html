@@ -5,7 +5,7 @@
 <div layout:fragment="content">
     <h4 th:text="#{product.detail.page.title}">product detail title</h4>
 
-    <table th:object="${product}">
+    <table th:object="${productDto}">
         <tr>
             <th>ProductId</th>
             <td><b th:text="*{productId}"></b></td>
@@ -36,8 +36,8 @@
         </tr>
     </table>
 
-    <a th:href="@{__${product.productId}__/edit}" class="btn btn-primary">Edit</a>
-    <a th:href="@{/products}" class="btn btn-primary">Back to List</a>
+    <div><a th:href="@{__${productDto.productId}__/edit}" class="btn btn-primary">Edit</a></div>
+    <div><a th:href="@{/products}" class="btn btn-primary">Back to List</a></div>
 </div>
 </body>
 
