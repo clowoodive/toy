@@ -34,7 +34,7 @@ public class ProductService {
     public List<ProductDto> getProducts() {
         val now = LocalDateTime.now();
 
-        List<ProductMetaEntity> validProductMetaEntityList = investingDBMapper.selectProductMetaListValid(now);
+        List<ProductMetaEntity> validProductMetaEntityList = investingDBMapper.selectProductAll();
         if (validProductMetaEntityList.size() == 0)
             return new ArrayList<ProductDto>();
 
