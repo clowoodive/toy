@@ -1,8 +1,7 @@
 package clowoodive.toy.investing.controller;
 
-import clowoodive.toy.investing.dto.ProductDto;
-import clowoodive.toy.investing.error.ResultCode;
 import clowoodive.toy.investing.product.ProductController;
+import clowoodive.toy.investing.product.ProductDto;
 import clowoodive.toy.investing.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,15 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.MessageSource;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
+import java.lang.reflect.Field;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -31,29 +34,40 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ProductControllerUnitTest {
 
     @Autowired
-    MessageSource messageSource;
+    MockMvc mockMvc;
 
     @Autowired
-    MockMvc mockMvc;
+    MessageSource messageSource;
 
     @MockBean
     ProductService productService;
 
-    private long userId;
-
-    private int productId;
-
-    private int investingAmount;
+    private ProductDto productDto1;
+    private ProductDto productDto2;
 
     @BeforeEach
     void setUp() {
-        this.userId = 12340001;
-        this.productId = 1;
-        this.investingAmount = 500;
+        productDto1 = new ProductDto();
+        productDto1.setProductId(12);
+        productDto1.setTitle("first product");
+        productDto1.setTotalInvestingAmount(50000);
+        productDto1.setAccumInvestingAmount(20000);
+        productDto1.setInvestingUserCount(3);
+        productDto1.setOpenAt(LocalDateTime.now().minusDays(5).truncatedTo(ChronoUnit.MINUTES));
+        productDto1.setCloseAt(LocalDateTime.now().plusDays(5).truncatedTo(ChronoUnit.MINUTES));
+
+        productDto2 = new ProductDto();
+        productDto2.setProductId(34);
+        productDto2.setTitle("first product");
+        productDto2.setTotalInvestingAmount(30000);
+        productDto2.setAccumInvestingAmount(1000);
+        productDto2.setInvestingUserCount(1);
+        productDto2.setOpenAt(LocalDateTime.now().minusDays(10).truncatedTo(ChronoUnit.MINUTES));
+        productDto2.setCloseAt(LocalDateTime.now().plusDays(10).truncatedTo(ChronoUnit.MINUTES));
     }
 
     @Test
-    @DisplayName("상품 투자 정보")
+    @DisplayName("투자 상품 정보")
     void testGetProducts() throws Exception {
         // given
         ProductDto productDto1 = new ProductDto();
@@ -63,7 +77,7 @@ class ProductControllerUnitTest {
         productDto2.setProductId(456);
         productDto2.setTitle("second product");
 
-        given(productService.getProducts()).willReturn(Arrays.asList(productDto1, productDto2));
+        given(productService.getProducts()).willReturn(Arrays.asList(this.productDto1, this.productDto2));
 
         // when
         var resultActions = mockMvc.perform(
@@ -73,25 +87,25 @@ class ProductControllerUnitTest {
         // then
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(view().name("product/productList"))
-                .andExpect(model().attribute("productList", hasSize(2)))
-                .andExpect(model().attribute("productList", hasItem(
+                .andExpect(view().name("products/productList"))
+                .andExpect(model().attribute("productDtos", hasSize(2)))
+                .andExpect(model().attribute("productDtos", hasItem(
                         allOf(
-                                hasProperty("productId", is(123)),
-                                hasProperty("title", is("first product"))
+                                hasProperty("productId", is(this.productDto1.getProductId())),
+                                hasProperty("title", is(this.productDto1.getTitle()))
                         )
                 )))
-                .andExpect(model().attribute("productList", hasItem(
+                .andExpect(model().attribute("productDtos", hasItem(
                         allOf(
-                                hasProperty("productId", is(456)),
-                                hasProperty("title", is("second product"))
+                                hasProperty("productId", is(this.productDto2.getProductId())),
+                                hasProperty("title", is(this.productDto2.getTitle()))
                         )
                 )));
         then(productService).should(times(1)).getProducts();
     }
 
     @Test
-    @DisplayName("상품 투자 정보_데이터 없음")
+    @DisplayName("투자 상품 정보_데이터 없음")
     void testGetProducts_empty() throws Exception {
         // given
         String noResultMsg = messageSource.getMessage("common.label.noResult", null, null);
@@ -105,173 +119,214 @@ class ProductControllerUnitTest {
         // then
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("productList", hasSize(0)))
+                .andExpect(model().attribute("productDtos", hasSize(0)))
                 .andExpect(content().string(containsString(noResultMsg)));
         then(productService).should(times(1)).getProducts();
     }
 
     @Test
-    @DisplayName("상품 투자")
-    void testInvestProduct() throws Exception {
+    @DisplayName("투자 상품 상세 정보")
+    void testGetProductDetail() throws Exception {
         // given
-        given(productService.investProduct(anyLong(), anyInt(), anyLong())).willReturn(this.productId);
+        given(productService.getProductById(anyInt())).willReturn(this.productDto1);
 
         // when
         var resultActions = mockMvc.perform(
-                post("/investing/user/products/{product_id}/investing-amount/{investing_amount}", this.productId, this.investingAmount)
-                        .header(InvestingController.HEADER_USER_ID_KEY, this.userId)
-                        .accept(MediaType.APPLICATION_JSON)
+                get("/products/" + this.productDto1.getProductId())
         );
 
         // then
-        resultActions.andExpect(status().isOk());
-        then(productService).should(times(1)).investProduct(anyLong(), anyInt(), anyLong());
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(view().name("products/productDetail"))
+                .andExpect(model().attribute("productDto", notNullValue()))
+                .andExpect(model().attribute("productDto", allOf(
+                                hasProperty("productId", is(this.productDto1.getProductId())),
+                                hasProperty("title", is(this.productDto1.getTitle()))
+                        )
+                ));
+        then(productService).should(times(1)).getProductById(anyInt());
     }
 
     @Test
-    @DisplayName("상품 투자_userId 누락")
-    void testInvestProduct_userId_miss() throws Exception {
+    @DisplayName("투자 상품 등록 폼 요청")
+    void testShowCreateProductForm() throws Exception {
         // given
 
         // when
         var resultActions = mockMvc.perform(
-                post("/investing/user/products/{product_id}/investing-amount/{investing_amount}", this.productId, this.investingAmount)
-//                        .header(InvestingController.HEADER_USER_ID_KEY, userId)
-                        .accept(MediaType.APPLICATION_JSON)
+                get("/products/create")
         );
 
         // then
-        resultActions.andExpect(status().isForbidden())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.BadReqParamUserId.getCode()));
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(view().name(ProductController.VIEW_PRODUCT_CREATE_OR_UPDATE_FORM))
+                .andExpect(model().attribute("productDto", notNullValue()));
     }
 
     @Test
-    @DisplayName("상품 투자_빈 userId")
-    void testInvestProduct_userId_empty() throws Exception {
+    @DisplayName("투자 상품 등록")
+    void testCreateProductForm() throws Exception {
         // given
-        String emptyUserId = "";
+        this.productDto1.setProductId(0); // 무시됨
+        MultiValueMap<String, String> mvMap = getFieldMapByReflection(this.productDto1);
 
         // when
         var resultActions = mockMvc.perform(
-                post("/investing/user/products/{product_id}/investing-amount/{investing_amount}", this.productId, this.investingAmount)
-                        .header(InvestingController.HEADER_USER_ID_KEY, emptyUserId)
-                        .accept(MediaType.APPLICATION_JSON)
+                post("/products/create")
+                        .params(mvMap)
         );
 
         // then
-        resultActions.andExpect(status().isForbidden())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.BadReqParamUserId.getCode()));
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/products"));
+        then(productService).should(times(1)).saveProduct(any());
+    }
+
+    private MultiValueMap<String, String> getFieldMapByReflection(Object obj) throws IllegalAccessException {
+        Class<?> aClass = obj.getClass();
+        Field[] declaredFields = aClass.getDeclaredFields();
+        MultiValueMap<String, String> mvMap = new LinkedMultiValueMap<>();
+
+        for (Field field : declaredFields) {
+            field.setAccessible(true);
+            mvMap.add(field.getName(), field.get(this.productDto1) == null ? null : field.get(this.productDto1).toString());
+        }
+
+        return mvMap;
     }
 
     @Test
-    @DisplayName("상품 투자_숫자가 아닌 userId")
-    void testInvestProduct_userId_notNumber() throws Exception {
+    @DisplayName("투자 상품 등록_잘못된 입력")
+    void testCreateProductForm_invalid() throws Exception {
         // given
-        String strUserId = "notNumber";
+        this.productDto1.setProductId(0); // 무시됨
+        this.productDto1.setTitle("0123456789012345678901234567890123456789012345"); // 46자
+        this.productDto1.setTotalInvestingAmount(-1);
+        this.productDto1.setAccumInvestingAmount(-2);
+        this.productDto1.setInvestingUserCount(-3);
+        this.productDto1.setOpenAt(null);
+        this.productDto1.setCloseAt(null);
+
+        MultiValueMap<String, String> mvMap = getFieldMapByReflection(this.productDto1);
 
         // when
         var resultActions = mockMvc.perform(
-                post("/investing/user/products/{product_id}/investing-amount/{investing_amount}", this.productId, this.investingAmount)
-                        .header(InvestingController.HEADER_USER_ID_KEY, strUserId)
-                        .accept(MediaType.APPLICATION_JSON)
+                post("/products/create")
+                        .params(mvMap)
         );
 
         // then
-        resultActions.andExpect(status().isForbidden())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.InternalServerError.getCode()));
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(view().name(ProductController.VIEW_PRODUCT_CREATE_OR_UPDATE_FORM))
+                .andExpect(model().errorCount(6))
+                .andExpectAll(
+                        model().attributeHasFieldErrorCode("productDto", "title", "Size"),
+                        model().attributeHasFieldErrorCode("productDto", "totalInvestingAmount", "PositiveOrZero"),
+                        model().attributeHasFieldErrorCode("productDto", "accumInvestingAmount", "PositiveOrZero"),
+                        model().attributeHasFieldErrorCode("productDto", "investingUserCount", "PositiveOrZero"),
+                        model().attributeHasFieldErrorCode("productDto", "openAt", "NotNull"),
+                        model().attributeHasFieldErrorCode("productDto", "closeAt", "NotNull")
+                );
     }
 
     @Test
-    @DisplayName("상품 투자_유효하지 않은 userId")
-    void testInvestProduct_userId_invalid() throws Exception {
+    @DisplayName("투자 상품 수정 폼 요청")
+    void testShowUpdateProductForm() throws Exception {
         // given
-        long invalidUserId = -1;
+        given(productService.getProductById(productDto1.getProductId())).willReturn(productDto1);
 
         // when
         var resultActions = mockMvc.perform(
-                post("/investing/user/products/{product_id}/investing-amount/{investing_amount}", this.productId, this.investingAmount)
-                        .header(InvestingController.HEADER_USER_ID_KEY, invalidUserId)
-                        .accept(MediaType.APPLICATION_JSON)
+                get("/products/" + productDto1.getProductId() + "/edit")
         );
 
         // then
-        resultActions.andExpect(status().isForbidden())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.InvalidUserId.getCode()));
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(view().name(ProductController.VIEW_PRODUCT_CREATE_OR_UPDATE_FORM))
+                .andExpect(model().attribute("productDto", notNullValue()))
+                .andExpect(model().attribute("productDto", allOf(
+                                hasProperty("productId", is(productDto1.getProductId())),
+                                hasProperty("title", is(productDto1.getTitle())),
+                                hasProperty("totalInvestingAmount", is(productDto1.getTotalInvestingAmount())),
+                                hasProperty("accumInvestingAmount", is(productDto1.getAccumInvestingAmount())),
+                                hasProperty("investingUserCount", is(productDto1.getInvestingUserCount())),
+                                hasProperty("openAt", is(productDto1.getOpenAt())),
+                                hasProperty("closeAt", is(productDto1.getCloseAt()))
+                        )
+                ));
     }
 
     @Test
-    @DisplayName("상품 투자_숫자가 아닌 productId")
-    void testInvestProduct_productId_notNumber() throws Exception {
+    @DisplayName("투자 상품 수정")
+    void testUpdateProductForm() throws Exception {
         // given
-        String strProductId = "notNumber";
+        // this.productDto1.setProductId(0); // 무시됨
+        this.productDto1.setTitle("update");
+        this.productDto1.setTotalInvestingAmount(1);
+        this.productDto1.setAccumInvestingAmount(2);
+        this.productDto1.setInvestingUserCount(3);
+        this.productDto1.setOpenAt(this.productDto1.getOpenAt().minusDays(1));
+        this.productDto1.setCloseAt(this.productDto1.getCloseAt().plusDays(1));
+
+        MultiValueMap<String, String> mvMap = getFieldMapByReflection(this.productDto1);
+
+        given(productService.getProductById(productDto1.getProductId())).willReturn(productDto1);
 
         // when
         var resultActions = mockMvc.perform(
-                post("/investing/user/products/{product_id}/investing-amount/{investing_amount}", strProductId, this.investingAmount)
-                        .header(InvestingController.HEADER_USER_ID_KEY, this.userId)
-                        .accept(MediaType.APPLICATION_JSON)
+                post("/products/" + productDto1.getProductId() + "/edit")
+                        .params(mvMap)
         );
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/products"));
+        then(productService).should(times(1)).getProductById(anyInt());
+        then(productService).should(times(1)).saveProduct(any());
     }
 
     @Test
-    @DisplayName("상품 투자_유효하지 않은 productId")
-    void testInvestProduct_productId_invalid() throws Exception {
+    @DisplayName("투자 상품 수정_잘못된 입력")
+    void testUpdateProductForm_invalid() throws Exception {
         // given
-        int invalidProductId = 0;
+        given(productService.getProductById(productDto1.getProductId())).willReturn(productDto1);
+
+        // this.productDto1.setProductId(0); // 무시됨
+        this.productDto1.setTitle("0123456789012345678901234567890123456789012345"); // 46자
+        this.productDto1.setTotalInvestingAmount(-1);
+        this.productDto1.setAccumInvestingAmount(-2);
+        this.productDto1.setInvestingUserCount(-3);
+        this.productDto1.setOpenAt(null);
+        this.productDto1.setCloseAt(null);
+
+        MultiValueMap<String, String> mvMap = getFieldMapByReflection(this.productDto1);
 
         // when
         var resultActions = mockMvc.perform(
-                post("/investing/user/products/{product_id}/investing-amount/{investing_amount}", invalidProductId, this.investingAmount)
-                        .header(InvestingController.HEADER_USER_ID_KEY, this.userId)
-                        .accept(MediaType.APPLICATION_JSON)
+                post("/products/" + productDto1.getProductId() + "/edit")
+                        .params(mvMap)
         );
 
         // then
-        resultActions.andExpect(status().isForbidden())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.InvalidProductId.getCode()));
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(view().name(ProductController.VIEW_PRODUCT_CREATE_OR_UPDATE_FORM))
+                .andExpect(model().errorCount(6))
+                .andExpectAll(
+                        model().attributeHasFieldErrorCode("productDto", "title", "Size"),
+                        model().attributeHasFieldErrorCode("productDto", "totalInvestingAmount", "PositiveOrZero"),
+                        model().attributeHasFieldErrorCode("productDto", "accumInvestingAmount", "PositiveOrZero"),
+                        model().attributeHasFieldErrorCode("productDto", "investingUserCount", "PositiveOrZero"),
+                        model().attributeHasFieldErrorCode("productDto", "openAt", "NotNull"),
+                        model().attributeHasFieldErrorCode("productDto", "closeAt", "NotNull")
+                );
     }
 
-    @Test
-    @DisplayName("상품 투자_숫자가 아닌 investingAmount")
-    void testInvestProduct_investingAmount_notNumber() throws Exception {
-        // given
-        String strInvestingAmount = "notNumber";
 
-        // when
-        var resultActions = mockMvc.perform(
-                post("/investing/user/products/{product_id}/investing-amount/{investing_amount}", this.productId, strInvestingAmount)
-                        .header(InvestingController.HEADER_USER_ID_KEY, this.userId)
-                        .accept(MediaType.APPLICATION_JSON)
-        );
-
-        // then
-        resultActions.andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @DisplayName("상품 투자_유효하지 않은 investingAmount")
-    void testInvestProduct_investingAmount_invalid() throws Exception {
-        // given
-        int invalidInvestingAmount = 0;
-
-        // when
-        var resultActions = mockMvc.perform(
-                post("/investing/user/products/{product_id}/investing-amount/{investing_amount}", this.productId, invalidInvestingAmount)
-                        .header(InvestingController.HEADER_USER_ID_KEY, this.userId)
-                        .accept(MediaType.APPLICATION_JSON)
-        );
-
-        // then
-        resultActions.andExpect(status().isForbidden())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result_code").value(ResultCode.InvalidAmount.getCode()));
-    }
 }
