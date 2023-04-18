@@ -1,6 +1,5 @@
 package clowoodive.toy.investing.product;
 
-import clowoodive.toy.investing.dto.ProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,7 @@ import java.util.List;
 @RequestMapping(value = "/products")
 public class ProductController {
 
-    private static final String VIEW_PRODUCT_CREATE_OR_UPDATE_FORM = "products/createOrUpdateProductForm";
+    public static final String VIEW_PRODUCT_CREATE_OR_UPDATE_FORM = "products/createOrUpdateProductForm";
 
     private final ProductService productService;
 
@@ -31,7 +30,7 @@ public class ProductController {
 
     @ModelAttribute("productDto")
     public ProductDto findProduct(@PathVariable(name = "productId", required = false) Integer productId) {
-        return productId == null ? new ProductDto() : this.productService.getProductsById(productId);
+        return productId == null ? new ProductDto() : this.productService.getProductById(productId);
     }
 
     @GetMapping("")
@@ -65,7 +64,7 @@ public class ProductController {
         int nextProductId = productService.getNextProductId();
         productDto.setProductId(nextProductId);
 
-        productService.updateProduct(productDto);
+        productService.saveProduct(productDto);
 
         return "redirect:/products";
     }
@@ -78,13 +77,13 @@ public class ProductController {
 
     @PostMapping("/{productId}/edit")
     public String updateProductForm(@Valid ProductDto productDto, BindingResult result, Model model) {
-        // InitBinder에서 ProductId를 제외하고 바인딩,  @ModelAttribute("productDto")에서 ProductId를 가져와서 대입해줌
 
+        // InitBinder에서 ProductId를 제외하고 바인딩,  @ModelAttribute("productDto")에서 ProductId를 가져와서 대입해줌
         if (result.hasErrors()) {
             return VIEW_PRODUCT_CREATE_OR_UPDATE_FORM;
         }
 
-        productService.updateProduct(productDto);
+        productService.saveProduct(productDto);
 
         return "redirect:/products";
     }

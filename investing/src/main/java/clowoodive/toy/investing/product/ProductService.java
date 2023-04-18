@@ -1,12 +1,10 @@
 package clowoodive.toy.investing.product;
 
-import clowoodive.toy.investing.dto.ProductDto;
 import clowoodive.toy.investing.entity.ProductInvestingEntity;
-import clowoodive.toy.investing.entity.ProductMetaEntity;
 import clowoodive.toy.investing.entity.UserProductEntity;
 import clowoodive.toy.investing.error.InvestingException;
 import clowoodive.toy.investing.error.ResultCode;
-import clowoodive.toy.investing.mapper.InvestingDBMapper;
+import clowoodive.toy.investing.mapper.ProductDBMapper;
 import clowoodive.toy.investing.mapper.UserDBMapper;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +14,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
 
-    private final InvestingDBMapper investingDBMapper;
+    private final ProductDBMapper productDBMapper;
     private final UserDBMapper userDBMapper;
 
     @Autowired
-    public ProductService(InvestingDBMapper investingDBMapper, UserDBMapper userDBMapper) {
-        this.investingDBMapper = investingDBMapper;
+    public ProductService(ProductDBMapper productDBMapper, UserDBMapper userDBMapper) {
+        this.productDBMapper = productDBMapper;
         this.userDBMapper = userDBMapper;
     }
 
     public List<ProductDto> getProducts() {
         val now = LocalDateTime.now();
 
-        List<ProductMetaEntity> validProductMetaEntityList = investingDBMapper.selectProductAll();
+        List<ProductEntity> validProductMetaEntityList = productDBMapper.selectProductAll();
         if (validProductMetaEntityList.size() == 0)
             return new ArrayList<ProductDto>();
 
@@ -49,65 +45,62 @@ public class ProductService {
 
         List<ProductDto> productDtoList = new ArrayList<>();
         for (var productMetaEntity : validProductMetaEntityList) {
-
-            boolean isInvestingClosed = productMetaEntity.total_investing_amount <= productMetaEntity.accumulated_investing_amount;
-            ProductDto productDto = new ProductDto(productMetaEntity, isInvestingClosed);
+            ProductDto productDto = new ProductDto(productMetaEntity);
             productDtoList.add(productDto);
         }
 
         return productDtoList;
     }
 
-    public ProductDto getProductsById(int productId) {
-        ProductMetaEntity productMetaEntity = investingDBMapper.selectProductMeta(productId);
-        if (productMetaEntity == null)
+    public ProductDto getProductById(int productId) {
+        ProductEntity productEntity = productDBMapper.selectProductById(productId);
+        if (productEntity == null)
             return null;
 
-        boolean isInvestingClosed = productMetaEntity.total_investing_amount <= productMetaEntity.accumulated_investing_amount;
-        return new ProductDto(productMetaEntity, isInvestingClosed);
+        return new ProductDto(productEntity);
     }
 
     public int getNextProductId() {
-        return investingDBMapper.selectNextProductId();
+        return productDBMapper.selectNextProductId();
     }
 
     @Transactional
-    public void updateProduct(ProductDto productDto){
+    public int saveProduct(ProductDto productDto){
 
-        ProductMetaEntity productEntity = new ProductMetaEntity(productDto);
+        ProductEntity productEntity = new ProductEntity(productDto);
 
-        this.investingDBMapper.insertOrUpdateProductMeta(productEntity);
+        return this.productDBMapper.insertOrUpdateProductMeta(productEntity);
     }
 
     @Transactional
     public void deleteProduct(ProductDto productDto){
 
-        int result = this.investingDBMapper.deleteProductById(productDto.productId);
+        int result = this.productDBMapper.deleteProductById(productDto.getProductId());
     }
 
     @Transactional
     public int investProduct(long userId, int productId, long investingAmount) {
         var now = LocalDateTime.now();
 
-        ProductMetaEntity productMetaEntity = investingDBMapper.selectProductMeta(productId);
+        ProductEntity productMetaEntity = productDBMapper.selectProductById(productId);
         if (productMetaEntity == null)
             throw new InvestingException(ResultCode.InvalidProductId, "invalid product_id");
 
-        if (productMetaEntity.started_at.isAfter(now) || productMetaEntity.finished_at.isBefore(now))
+        if (productMetaEntity.getOpen_at().isAfter(now) || productMetaEntity.getClose_at().isBefore(now))
             throw new InvestingException(ResultCode.BadPeriod, "invalid product period");
 
         UserProductEntity userProductEntity = userDBMapper.selectUserProduct(userId, productId);
         if (userProductEntity != null)
             throw new InvestingException(ResultCode.DuplicatedInvesting, "already investing");
 
-        ProductInvestingEntity productInvestingEntity = investingDBMapper.selectProductInvesting(productId);
+        ProductInvestingEntity productInvestingEntity = productDBMapper.selectProductInvesting(productId);
         if (productInvestingEntity == null)
             throw new InvestingException(ResultCode.BadInvestingData);
 
-        if (productInvestingEntity.accumulated_investing_amount >= productMetaEntity.total_investing_amount)
+        if (productInvestingEntity.accumulated_investing_amount >= productMetaEntity.getTotal_investing_amount())
             throw new InvestingException(ResultCode.SoldOut, "already soldout");
 
-        int isUpdated = investingDBMapper.updateProductInvesting(productId, investingAmount, productMetaEntity.total_investing_amount);
+        int isUpdated = productDBMapper.updateProductInvesting(productId, investingAmount, productMetaEntity.getTotal_investing_amount());
         if (isUpdated <= 0)
             throw new InvestingException(ResultCode.ExceededAmount, "exceeded investing amount");
 

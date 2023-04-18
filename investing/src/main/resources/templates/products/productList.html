@@ -19,11 +19,13 @@
         <tr th:if="${not #arrays.isEmpty(productDtos)}" th:each="item,itemStat : ${productDtos}">
             <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.productId}"></a></td>
             <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.title}"></a></td>
-            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.totalInvestingAmount}"></a></td>
-            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.accumInvestingAmount}"></a></td>
-            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.investingUserCount}"></a></td>
-            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.openAt}"></a></td>
-            <td><a th:href="@{products/{productId}(productId=${item.productId})}" th:text="${item.closeAt}"></a></td>
+            <td th:text="${item.totalInvestingAmount}"></td>
+            <td th:text="${item.accumInvestingAmount}"></td>
+            <td th:text="${item.investingUserCount}"></td>
+            <td th:text="*{#temporals.format(item.openAt, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="*{#temporals.format(item.closeAt, 'yyyy-MM-dd HH:mm')}"></td>
+<!--            <td th:text="${item.openAt}"></td>-->
+<!--            <td th:text="${item.closeAt}"></td>-->
 <!--            <td><a th:href="@{detail(mailIdx=${item.mailIdx})}" th:text="${item.messageList[0].message}">message</a></td>-->
 <!--            <td th:text="*{#temporals.format(item.sendAt, 'yyyy-MM-dd HH:mm')}">sendAt</td>-->
 <!--            <td th:text="${item.expireHour}">expireHour</td>-->

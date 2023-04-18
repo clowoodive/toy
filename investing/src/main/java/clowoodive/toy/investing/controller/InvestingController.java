@@ -1,6 +1,6 @@
 package clowoodive.toy.investing.controller;
 
-import clowoodive.toy.investing.dto.ProductDto;
+import clowoodive.toy.investing.product.ProductDto;
 import clowoodive.toy.investing.product.ProductService;
 import clowoodive.toy.investing.error.InvestingException;
 import clowoodive.toy.investing.error.ResultCode;
@@ -38,7 +38,7 @@ public class InvestingController {
     @GetMapping("/products/{productId}")
     public String getProductsDetail(@PathVariable("productId") int productId, Model model) {
         ModelAndView mav = new ModelAndView("investing/productDetail");
-        ProductDto productDto = investingService.getProductsById(productId);
+        ProductDto productDto = investingService.getProductById(productId);
 
         model.addAttribute("product", productDto);
 

@@ -1,7 +1,7 @@
 package clowoodive.toy.investing.dto;
 
 import clowoodive.toy.investing.entity.UserProductEntity;
-import clowoodive.toy.investing.entity.ProductMetaEntity;
+import clowoodive.toy.investing.product.ProductEntity;
 
 import java.time.LocalDateTime;
 
@@ -14,12 +14,12 @@ public class UserProductDto {
 
     public UserProductDto(){}
 
-    public UserProductDto(UserProductEntity userProductEntity, ProductMetaEntity productMeta) {
+    public UserProductDto(UserProductEntity userProductEntity, ProductEntity productEntity) {
         this.product_id = userProductEntity.product_id;
 
-        if (productMeta != null) {
-            this.title = productMeta.title;
-            this.total_investing_amount = productMeta.total_investing_amount;
+        if (productEntity != null) {
+            this.title = productEntity.getTitle();
+            this.total_investing_amount = productEntity.getTotal_investing_amount();
         }
 
         this.investing_amount = userProductEntity.investing_amount;

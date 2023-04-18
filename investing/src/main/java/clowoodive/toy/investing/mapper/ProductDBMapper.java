@@ -1,30 +1,30 @@
 package clowoodive.toy.investing.mapper;
 
 import clowoodive.toy.investing.entity.ProductInvestingEntity;
-import clowoodive.toy.investing.entity.ProductMetaEntity;
+import clowoodive.toy.investing.product.ProductEntity;
 import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
-public interface InvestingDBMapper {
+public interface ProductDBMapper {
     // ProductMetaEntity
 
-    @Insert("INSERT INTO product (product_id, title, total_investing_amount, accumulated_investing_amount, investing_user_count, started_at, finished_at) " +
-            "VALUES (#{product_id}, #{title}, #{total_investing_amount}, #{accumulated_investing_amount}, #{investing_user_count}, #{started_at}, #{finished_at})" +
+    @Insert("INSERT INTO product (product_id, title, total_investing_amount, accumulated_investing_amount, investing_user_count, open_at, close_at) " +
+            "VALUES (#{product_id}, #{title}, #{total_investing_amount}, #{accumulated_investing_amount}, #{investing_user_count}, #{open_at}, #{close_at})" +
             "ON DUPLICATE KEY UPDATE title = #{title}, total_investing_amount = #{total_investing_amount}, accumulated_investing_amount = #{accumulated_investing_amount}, " +
-            "investing_user_count = #{investing_user_count}, started_at = #{started_at}, finished_at = #{finished_at}")
-    int insertOrUpdateProductMeta(ProductMetaEntity productMetaEntity);
+            "investing_user_count = #{investing_user_count}, open_at = #{open_at}, close_at = #{close_at}")
+    int insertOrUpdateProductMeta(ProductEntity productMetaEntity);
 
     @Select("SELECT * FROM product")
-    List<ProductMetaEntity> selectProductAll();
+    List<ProductEntity> selectProductAll();
 
-    @Select("SELECT * FROM product WHERE started_at <= #{now} AND finished_at >= #{now}")
-    List<ProductMetaEntity> selectProductMetaListValid(@Param("now") LocalDateTime now);
+    @Select("SELECT * FROM product WHERE open_at <= #{now} AND close_at >= #{now}")
+    List<ProductEntity> selectProductMetaListValid(@Param("now") LocalDateTime now);
 
     @Select("SELECT * FROM product WHERE product_id = #{product_id}")
-    ProductMetaEntity selectProductMeta(@Param("product_id") int productId);
+    ProductEntity selectProductById(@Param("product_id") int productId);
 
     @Select("<script>"
             + "SELECT * FROM product_meta WHERE product_id IN "
@@ -32,7 +32,7 @@ public interface InvestingDBMapper {
             + "#{id}"
             + "</foreach>"
             + "</script>")
-    List<ProductMetaEntity> selectProductMetaListByIdList(@Param("product_id_list") List<Integer> productIdList);
+    List<ProductEntity> selectProductMetaListByIdList(@Param("product_id_list") List<Integer> productIdList);
 
 
     // ProductInvestingEntity

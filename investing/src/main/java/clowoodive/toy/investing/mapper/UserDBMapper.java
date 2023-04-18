@@ -1,11 +1,8 @@
 package clowoodive.toy.investing.mapper;
 
-import clowoodive.toy.investing.entity.ProductInvestingEntity;
-import clowoodive.toy.investing.entity.ProductMetaEntity;
 import clowoodive.toy.investing.entity.UserProductEntity;
 import org.apache.ibatis.annotations.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
