@@ -73,9 +73,10 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(ProductDto productDto){
+    public int deleteProduct(ProductDto productDto) {
 
         int result = this.productDBMapper.deleteProductById(productDto.getProductId());
+        return result;
     }
 
     @Transactional

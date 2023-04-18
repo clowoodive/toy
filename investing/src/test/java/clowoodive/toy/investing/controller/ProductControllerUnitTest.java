@@ -328,5 +328,22 @@ class ProductControllerUnitTest {
                 );
     }
 
+    @Test
+    @DisplayName("투자 상품 삭제")
+    void testDeleteProduct() throws Exception {
+        // given
+        given(productService.deleteProduct(any())).willReturn(1);
 
+        // when
+        var resultActions = mockMvc.perform(
+                post("/products/" + productDto1.getProductId() + "/delete")
+        );
+
+        // then
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/products"));
+        then(productService).should(times(1)).getProductById(anyInt());
+        then(productService).should(times(1)).deleteProduct(any());
+    }
 }
