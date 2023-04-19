@@ -1,5 +1,6 @@
 package clowoodive.toy.investing.controller;
 
+import clowoodive.toy.investing.BaseProductUnitTest;
 import clowoodive.toy.investing.product.ProductController;
 import clowoodive.toy.investing.product.ProductDto;
 import clowoodive.toy.investing.product.ProductService;
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductController.class)
-class ProductControllerUnitTest {
+class ProductControllerUnitTest extends BaseProductUnitTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -42,28 +43,8 @@ class ProductControllerUnitTest {
     @MockBean
     ProductService productService;
 
-    private ProductDto productDto1;
-    private ProductDto productDto2;
-
     @BeforeEach
     void setUp() {
-        productDto1 = new ProductDto();
-        productDto1.setProductId(12);
-        productDto1.setTitle("first product");
-        productDto1.setTotalInvestingAmount(50000);
-        productDto1.setAccumInvestingAmount(20000);
-        productDto1.setInvestingUserCount(3);
-        productDto1.setOpenAt(LocalDateTime.now().minusDays(5).truncatedTo(ChronoUnit.MINUTES));
-        productDto1.setCloseAt(LocalDateTime.now().plusDays(5).truncatedTo(ChronoUnit.MINUTES));
-
-        productDto2 = new ProductDto();
-        productDto2.setProductId(34);
-        productDto2.setTitle("first product");
-        productDto2.setTotalInvestingAmount(30000);
-        productDto2.setAccumInvestingAmount(1000);
-        productDto2.setInvestingUserCount(1);
-        productDto2.setOpenAt(LocalDateTime.now().minusDays(10).truncatedTo(ChronoUnit.MINUTES));
-        productDto2.setCloseAt(LocalDateTime.now().plusDays(10).truncatedTo(ChronoUnit.MINUTES));
     }
 
     @Test

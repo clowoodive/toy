@@ -6,7 +6,6 @@ import clowoodive.toy.investing.error.InvestingException;
 import clowoodive.toy.investing.error.ResultCode;
 import clowoodive.toy.investing.mapper.ProductDBMapper;
 import clowoodive.toy.investing.mapper.UserDBMapper;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,10 +27,9 @@ public class ProductService {
     }
 
     public List<ProductDto> getProducts() {
-        val now = LocalDateTime.now();
-
-        List<ProductEntity> validProductMetaEntityList = productDBMapper.selectProductAll();
-        if (validProductMetaEntityList.size() == 0)
+//        val now = LocalDateTime.now();
+        List<ProductEntity> productEntitys = productDBMapper.selectProductAll();
+        if (productEntitys.size() == 0)
             return new ArrayList<ProductDto>();
 
 //        Map<Integer, ProductInvestingEntity> productInvestingMap = null;
@@ -43,19 +41,19 @@ public class ProductService {
 //
 //        productInvestingMap = productInvestingEntityList.stream().collect(Collectors.toMap(k -> k.product_id, v -> v));
 
-        List<ProductDto> productDtoList = new ArrayList<>();
-        for (var productMetaEntity : validProductMetaEntityList) {
-            ProductDto productDto = new ProductDto(productMetaEntity);
-            productDtoList.add(productDto);
+        List<ProductDto> productDtos = new ArrayList<>();
+        for (var productEntity : productEntitys) {
+            ProductDto productDto = new ProductDto(productEntity);
+            productDtos.add(productDto);
         }
 
-        return productDtoList;
+        return productDtos;
     }
 
     public ProductDto getProductById(int productId) {
         ProductEntity productEntity = productDBMapper.selectProductById(productId);
         if (productEntity == null)
-            return null;
+            return new ProductDto();
 
         return new ProductDto(productEntity);
     }
@@ -66,10 +64,9 @@ public class ProductService {
 
     @Transactional
     public int saveProduct(ProductDto productDto){
-
         ProductEntity productEntity = new ProductEntity(productDto);
 
-        return this.productDBMapper.insertOrUpdateProductMeta(productEntity);
+        return this.productDBMapper.insertOrUpdateProduct(productEntity);
     }
 
     @Transactional
