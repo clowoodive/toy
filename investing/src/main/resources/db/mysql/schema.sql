@@ -10,7 +10,7 @@
 
 -- investing product table
 CREATE TABLE IF NOT EXISTS `product_entity` (
-`product_id` int(11) NOT NULL,
+`product_id` int(11) NOT NULL AUTO_INCREMENT,
 `title` varchar(45) NOT NULL,
 `total_investing_amount` bigint(20) NOT NULL,
 `accumulated_investing_amount` bigint(20) NOT NULL,

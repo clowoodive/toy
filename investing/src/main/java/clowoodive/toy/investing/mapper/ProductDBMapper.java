@@ -12,10 +12,11 @@ import java.util.List;
 public interface ProductDBMapper {
     // ProductMetaEntity
 
-    @Insert("INSERT INTO product_entity (product_id, title, total_investing_amount, accumulated_investing_amount, investing_user_count, open_at, close_at) " +
-            "VALUES (#{product_id}, #{title}, #{total_investing_amount}, #{accumulated_investing_amount}, #{investing_user_count}, #{open_at}, #{close_at})" +
+    @Insert("INSERT INTO product_entity (title, total_investing_amount, accumulated_investing_amount, investing_user_count, open_at, close_at) " +
+            "VALUES (#{title}, #{total_investing_amount}, #{accumulated_investing_amount}, #{investing_user_count}, #{open_at}, #{close_at})" +
             "ON DUPLICATE KEY UPDATE title = #{title}, total_investing_amount = #{total_investing_amount}, accumulated_investing_amount = " +
             "#{accumulated_investing_amount}, investing_user_count = #{investing_user_count}, open_at = #{open_at}, close_at = #{close_at}")
+    @Options(useGeneratedKeys = true, keyProperty = "product_id")
     int insertOrUpdateProduct(ProductEntity productMetaEntity);
 
     @Select("SELECT * FROM product_entity")
