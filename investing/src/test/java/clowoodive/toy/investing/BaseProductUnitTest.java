@@ -67,7 +67,7 @@ public class BaseProductUnitTest {
         this.productEntity2.setClose_at(LocalDateTime.now().minusDays(7).truncatedTo(ChronoUnit.MINUTES));
     }
 
-    protected boolean isSameObject(Object obj1, Object obj2) throws IllegalAccessException {
+    protected boolean isFieldValueSame(Object obj1, Object obj2) throws IllegalAccessException {
         Class<?> aClass = obj1.getClass();
         Field[] declaredFields = aClass.getDeclaredFields();
 

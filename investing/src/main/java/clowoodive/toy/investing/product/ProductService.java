@@ -18,12 +18,12 @@ import java.util.List;
 public class ProductService {
 
     private final ProductDBMapper productDBMapper;
-    private final UserDBMapper userDBMapper;
+//    private final UserDBMapper userDBMapper;
 
     @Autowired
-    public ProductService(ProductDBMapper productDBMapper, UserDBMapper userDBMapper) {
+    public ProductService(ProductDBMapper productDBMapper) {
         this.productDBMapper = productDBMapper;
-        this.userDBMapper = userDBMapper;
+//        this.userDBMapper = userDBMapper;
     }
 
     public List<ProductDto> getProducts() {
@@ -58,9 +58,9 @@ public class ProductService {
         return new ProductDto(productEntity);
     }
 
-    public int getNextProductId() {
-        return productDBMapper.selectNextProductId();
-    }
+//    public int getNextProductId() {
+//        return productDBMapper.selectNextProductId();
+//    }
 
     @Transactional
     public int saveProduct(ProductDto productDto){
@@ -71,47 +71,45 @@ public class ProductService {
 
     @Transactional
     public int deleteProduct(ProductDto productDto) {
-
-        int result = this.productDBMapper.deleteProductById(productDto.getProductId());
-        return result;
+        return this.productDBMapper.deleteProductById(productDto.getProductId());
     }
 
-    @Transactional
-    public int investProduct(long userId, int productId, long investingAmount) {
-        var now = LocalDateTime.now();
-
-        ProductEntity productMetaEntity = productDBMapper.selectProductById(productId);
-        if (productMetaEntity == null)
-            throw new InvestingException(ResultCode.InvalidProductId, "invalid product_id");
-
-        if (productMetaEntity.getOpen_at().isAfter(now) || productMetaEntity.getClose_at().isBefore(now))
-            throw new InvestingException(ResultCode.BadPeriod, "invalid product period");
-
-        UserProductEntity userProductEntity = userDBMapper.selectUserProduct(userId, productId);
-        if (userProductEntity != null)
-            throw new InvestingException(ResultCode.DuplicatedInvesting, "already investing");
-
-        ProductInvestingEntity productInvestingEntity = productDBMapper.selectProductInvesting(productId);
-        if (productInvestingEntity == null)
-            throw new InvestingException(ResultCode.BadInvestingData);
-
-        if (productInvestingEntity.accumulated_investing_amount >= productMetaEntity.getTotal_investing_amount())
-            throw new InvestingException(ResultCode.SoldOut, "already soldout");
-
-        int isUpdated = productDBMapper.updateProductInvesting(productId, investingAmount, productMetaEntity.getTotal_investing_amount());
-        if (isUpdated <= 0)
-            throw new InvestingException(ResultCode.ExceededAmount, "exceeded investing amount");
-
-        userProductEntity = new UserProductEntity();
-        userProductEntity.user_id = userId;
-        userProductEntity.product_id = productId;
-        userProductEntity.investing_amount = investingAmount;
-        userProductEntity.investing_at = LocalDateTime.now();
-
-        int isInserted = userDBMapper.insertUserProduct(userProductEntity);
-        if (isInserted <= 0)
-            throw new InvestingException(ResultCode.InternalServerError, "error create user data");
-
-        return productId;
-    }
+//    @Transactional
+//    public int investProduct(long userId, int productId, long investingAmount) {
+//        var now = LocalDateTime.now();
+//
+//        ProductEntity productMetaEntity = productDBMapper.selectProductById(productId);
+//        if (productMetaEntity == null)
+//            throw new InvestingException(ResultCode.InvalidProductId, "invalid product_id");
+//
+//        if (productMetaEntity.getOpen_at().isAfter(now) || productMetaEntity.getClose_at().isBefore(now))
+//            throw new InvestingException(ResultCode.BadPeriod, "invalid product period");
+//
+//        UserProductEntity userProductEntity = userDBMapper.selectUserProduct(userId, productId);
+//        if (userProductEntity != null)
+//            throw new InvestingException(ResultCode.DuplicatedInvesting, "already investing");
+//
+//        ProductInvestingEntity productInvestingEntity = productDBMapper.selectProductInvesting(productId);
+//        if (productInvestingEntity == null)
+//            throw new InvestingException(ResultCode.BadInvestingData);
+//
+//        if (productInvestingEntity.accumulated_investing_amount >= productMetaEntity.getTotal_investing_amount())
+//            throw new InvestingException(ResultCode.SoldOut, "already soldout");
+//
+//        int isUpdated = productDBMapper.updateProductInvesting(productId, investingAmount, productMetaEntity.getTotal_investing_amount());
+//        if (isUpdated <= 0)
+//            throw new InvestingException(ResultCode.ExceededAmount, "exceeded investing amount");
+//
+//        userProductEntity = new UserProductEntity();
+//        userProductEntity.user_id = userId;
+//        userProductEntity.product_id = productId;
+//        userProductEntity.investing_amount = investingAmount;
+//        userProductEntity.investing_at = LocalDateTime.now();
+//
+//        int isInserted = userDBMapper.insertUserProduct(userProductEntity);
+//        if (isInserted <= 0)
+//            throw new InvestingException(ResultCode.InternalServerError, "error create user data");
+//
+//        return productId;
+//    }
 }

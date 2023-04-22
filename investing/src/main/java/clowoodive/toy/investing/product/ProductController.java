@@ -61,10 +61,10 @@ public class ProductController {
             return VIEW_PRODUCT_CREATE_OR_UPDATE_FORM;
         }
 
-        int nextProductId = productService.getNextProductId();
-        productDto.setProductId(nextProductId);
+//        int nextProductId = productService.getNextProductId();
+//        productDto.setProductId(nextProductId);
 
-        productService.saveProduct(productDto);
+        int inserted = productService.saveProduct(productDto);
 
         return "redirect:/products";
     }

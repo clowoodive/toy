@@ -52,17 +52,17 @@ public interface ProductDBMapper {
 //            + "</script>")
 //    List<ProductInvestingEntity> selectProductInvestingListByIdList(@Param("product_id_list") List<Integer> productIdList);
 
-    @Select("SELECT * FROM product_entity WHERE product_id = #{product_id}")
-    ProductInvestingEntity selectProductInvesting(@Param("product_id") int productId);
+//    @Select("SELECT * FROM product_entity WHERE product_id = #{product_id}")
+//    ProductInvestingEntity selectProductInvesting(@Param("product_id") int productId);
 
-    @Select("SELECT MAX(product_id) + 1 FROM product_entity")
-    int selectNextProductId();
+//    @Select("SELECT MAX(product_id) + 1 FROM product_entity")
+//    int selectNextProductId();
 
-    @Update("UPDATE product_entity " +
-            "SET accumulated_investing_amount = accumulated_investing_amount + #{add_investing_amount}, investing_user_count = investing_user_count + 1 " +
-            "WHERE product_id = #{product_id} AND (accumulated_investing_amount + #{add_investing_amount}) <= #{total_investing_amount}")
-    int updateProductInvesting(@Param("product_id") int productId, @Param("add_investing_amount") long addInvestingAmount,
-                               @Param("total_investing_amount") long totalInvestingAmount);
+//    @Update("UPDATE product_entity " +
+//            "SET accumulated_investing_amount = accumulated_investing_amount + #{add_investing_amount}, investing_user_count = investing_user_count + 1 " +
+//            "WHERE product_id = #{product_id} AND (accumulated_investing_amount + #{add_investing_amount}) <= #{total_investing_amount}")
+//    int updateProductInvesting(@Param("product_id") int productId, @Param("add_investing_amount") long addInvestingAmount,
+//                               @Param("total_investing_amount") long totalInvestingAmount);
 
     @Delete("DELETE FROM product_entity WHERE product_id = #{product_id}")
     int deleteProductById(@Param("product_id") int productId);
