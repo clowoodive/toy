@@ -24,7 +24,6 @@ public class BaseProductUnitTest {
     void init() {
         initProductDtos();
         initProductEntitys();
-
     }
 
     private void initProductDtos() {
