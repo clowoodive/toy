@@ -156,7 +156,7 @@ class ProductControllerUnitTest extends BaseProductUnitTest {
         // when
         var resultActions = mockMvc.perform(
                 post("/products/create")
-                        .params(mvMap)
+                        .queryParams(mvMap)
         );
 
         // then
@@ -196,7 +196,7 @@ class ProductControllerUnitTest extends BaseProductUnitTest {
         // when
         var resultActions = mockMvc.perform(
                 post("/products/create")
-                        .params(mvMap)
+                        .queryParams(mvMap)
         );
 
         // then
@@ -261,7 +261,7 @@ class ProductControllerUnitTest extends BaseProductUnitTest {
         // when
         var resultActions = mockMvc.perform(
                 post("/products/" + productDto1.getProductId() + "/edit")
-                        .params(mvMap)
+                        .queryParams(mvMap)
         );
 
         // then
@@ -291,7 +291,7 @@ class ProductControllerUnitTest extends BaseProductUnitTest {
         // when
         var resultActions = mockMvc.perform(
                 post("/products/" + productDto1.getProductId() + "/edit")
-                        .params(mvMap)
+                        .queryParams(mvMap)
         );
 
         // then
